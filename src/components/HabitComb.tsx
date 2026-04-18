@@ -51,7 +51,7 @@ export function HabitComb() {
       </div>
 
       {/* Day header */}
-      <div className="grid grid-cols-[1fr_repeat(7,minmax(0,1fr))] gap-1 mb-2">
+      <div className="grid grid-cols-[110px_repeat(7,minmax(0,1fr))] gap-x-1 mb-3 pl-2">
         <div />
         {dayLabels.map((d, i) => (
           <div
@@ -65,14 +65,14 @@ export function HabitComb() {
         ))}
       </div>
 
-      {/* Habit rows */}
-      <div className="space-y-1">
-        {habits.map((habit) => (
+      {/* Habit rows — hexagonal hive */}
+      <div className="space-y-2">
+        {habits.map((habit, rowIdx) => (
           <div
             key={habit.id}
-            className="grid grid-cols-[1fr_repeat(7,minmax(0,1fr))] gap-1 items-stretch"
+            className="grid grid-cols-[110px_repeat(7,minmax(0,1fr))] gap-x-1 items-center"
           >
-            <div className="py-3 pr-2 min-w-0">
+            <div className="py-2 pr-2 min-w-0">
               <div className="font-bold text-sm truncate uppercase tracking-wide">{habit.name}</div>
               <div className="text-[10px] text-background/50 font-bold tracking-wider">{habit.tag}</div>
             </div>
@@ -81,14 +81,21 @@ export function HabitComb() {
                 key={i}
                 onClick={() => toggle(habit.id, i)}
                 className="relative aspect-square group"
+                style={{ transform: rowIdx % 2 === 1 ? "translateX(50%)" : undefined }}
                 aria-label={`Toggle ${habit.name} ${dayLabels[i]}`}
               >
                 <motion.div
                   whileTap={{ scale: 0.9 }}
-                  className={`absolute inset-0 transition-colors ${
-                    d ? "bg-background" : "bg-background/10 group-hover:bg-background/20"
-                  } ${i === todayIdx && !d ? "outline outline-1 -outline-offset-1 outline-background/60" : ""}`}
+                  className={`absolute inset-0 hex transition-colors ${
+                    d ? "bg-background" : "bg-background/10 group-hover:bg-background/25"
+                  }`}
                 />
+                {i === todayIdx && !d && (
+                  <div className="absolute inset-[3px] hex bg-foreground" />
+                )}
+                {i === todayIdx && !d && (
+                  <div className="absolute inset-[4px] hex bg-background/0 border border-background/60" style={{ clipPath: "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)" }} />
+                )}
                 <AnimatePresence>
                   {d && (
                     <motion.div
