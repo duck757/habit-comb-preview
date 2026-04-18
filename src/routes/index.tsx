@@ -7,136 +7,189 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-function Hexagon({ className = "", style = {} }: { className?: string; style?: React.CSSProperties }) {
-  return <div className={`hex ${className}`} style={style} />;
-}
-
 function Index() {
   return (
-    <main className="relative overflow-hidden">
-      {/* floating decorative hexagons */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <Hexagon className="absolute top-20 -left-10 w-40 h-40 opacity-30 animate-float bg-gradient-honey" />
-        <Hexagon className="absolute top-96 right-10 w-24 h-24 opacity-40 animate-float bg-gradient-honey" style={{ animationDelay: "1.5s" }} />
-        <Hexagon className="absolute bottom-40 left-1/4 w-16 h-16 opacity-30 animate-float bg-gradient-honey" style={{ animationDelay: "3s" }} />
+    <main className="bg-background text-foreground">
+      {/* Top ticker */}
+      <div className="bg-foreground text-background overflow-hidden border-b border-foreground">
+        <div className="marquee-track whitespace-nowrap py-2 text-xs font-bold uppercase tracking-[0.3em]">
+          {Array.from({ length: 2 }).map((_, k) => (
+            <span key={k} className="inline-flex">
+              {["Discipline > Motivation", "Build the comb", "Day 001", "No excuses", "Now in beta", "Ship your streak"].map((t, i) => (
+                <span key={i} className="px-8 inline-flex items-center gap-8">
+                  {t}<span className="opacity-40">/</span>
+                </span>
+              ))}
+            </span>
+          ))}
+        </div>
       </div>
 
       {/* Nav */}
-      <nav className="relative z-10 max-w-6xl mx-auto flex items-center justify-between px-6 py-6">
-        <div className="flex items-center gap-2.5">
-          <div className="relative w-10 h-10">
-            <Hexagon className="absolute inset-0 bg-gradient-honey shadow-honey" />
-            <span className="absolute inset-0 grid place-items-center text-xl">🐝</span>
+      <nav className="sticky top-0 z-40 bg-background/90 backdrop-blur border-b border-foreground/10">
+        <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 h-16">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 hex bg-foreground" />
+            <span className="font-display text-2xl tracking-tight">HABITCOMB</span>
           </div>
-          <span className="text-2xl font-bold tracking-tight">HabitComb</span>
-        </div>
-        <div className="hidden sm:flex items-center gap-7 text-sm font-medium text-muted-foreground">
-          <a href="#features" className="hover:text-foreground transition">Features</a>
-          <a href="#preview" className="hover:text-foreground transition">Try it</a>
-          <a href="#download" className="hover:text-foreground transition">Download</a>
+          <div className="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-[0.2em]">
+            <a href="#manifesto" className="hover:opacity-60">Manifesto</a>
+            <a href="#preview" className="hover:opacity-60">Preview</a>
+            <a href="#features" className="hover:opacity-60">System</a>
+            <a href="#download" className="hover:opacity-60">Get App</a>
+          </div>
+          <a href="#download" className="hidden sm:inline-block bg-foreground text-background px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] hover:opacity-80">
+            Download
+          </a>
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="relative max-w-6xl mx-auto px-6 pt-12 pb-20 grid lg:grid-cols-[1.1fr_1fr] gap-12 items-center">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <div className="inline-flex items-center gap-2 rounded-full border bg-card/60 backdrop-blur px-3 py-1.5 text-xs font-medium mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-            Now in early access · 12,000+ buzzing
+      {/* HERO */}
+      <section className="relative max-w-[1400px] mx-auto px-6 pt-12 pb-20">
+        <div className="flex items-start justify-between mb-8">
+          <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground">
+            Vol. 01 — The Habit Issue
           </div>
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[0.95] tracking-tight">
-            Build <span className="text-gradient-honey">sweet habits</span>,
-            <br />one cell at a time.
-          </h1>
-          <p className="mt-6 text-lg text-muted-foreground max-w-xl leading-relaxed">
-            HabitComb turns your daily routines into a living honeycomb. Tap a cell, fill your week,
-            and watch tiny consistent actions become a hive of progress.
-          </p>
-
-          <div className="mt-8" id="download">
-            <StoreButtons />
-            <p className="mt-3 text-xs text-muted-foreground">Free forever · No ads · Your data stays yours</p>
+          <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground hidden sm:block">
+            Est. 2026 / iOS · Android
           </div>
+        </div>
 
-          <div className="mt-10 flex items-center gap-6">
-            <div className="flex -space-x-2">
-              {["🦊","🐻","🐼","🦉"].map((e,i) => (
-                <div key={i} className="w-9 h-9 rounded-full bg-card border-2 border-background grid place-items-center text-base shadow-sm">{e}</div>
-              ))}
-            </div>
-            <div className="text-sm">
-              <div className="font-semibold">★★★★★ 4.9 / 5</div>
-              <div className="text-muted-foreground text-xs">from early beekeepers</div>
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          id="preview"
-          className="relative"
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="font-display text-[20vw] sm:text-[16vw] lg:text-[200px] leading-[0.85] tracking-tighter"
         >
-          <div className="absolute -inset-6 bg-gradient-honey opacity-20 blur-3xl rounded-full" />
-          <div className="relative">
-            <HabitComb />
+          BUILD<br />
+          THE<br />
+          <span className="italic" style={{ fontStyle: "italic" }}>COMB.</span>
+        </motion.h1>
+
+        <div className="mt-10 grid md:grid-cols-[2fr_1fr] gap-8 items-end border-t border-foreground pt-8">
+          <p className="text-lg sm:text-xl max-w-xl leading-snug font-medium">
+            One cell. One day. One rep. HabitComb is the habit tracker for people who don't need a pep talk —
+            just a clean grid and the discipline to fill it.
+          </p>
+          <div id="download" className="flex flex-col gap-3">
+            <StoreButtons />
           </div>
-        </motion.div>
+        </div>
       </section>
 
-      {/* Features */}
-      <section id="features" className="relative max-w-6xl mx-auto px-6 py-20">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <div className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">Why HabitComb</div>
-          <h2 className="text-4xl sm:text-5xl font-bold">A hive built for humans, not robots.</h2>
-        </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {[
-            { e: "🍯", t: "Visual streaks", d: "Your week becomes a living comb. Each filled cell is a tiny win you can actually see." },
-            { e: "🔔", t: "Gentle nudges", d: "Smart reminders that adapt to your rhythm. No nagging, just the right buzz at the right time." },
-            { e: "📈", t: "Honest insights", d: "Weekly reports that celebrate progress and surface patterns — without the toxic productivity vibe." },
-          ].map((f) => (
-            <div key={f.t} className="group relative rounded-3xl border bg-card/70 backdrop-blur p-7 hover:shadow-comb transition-all hover:-translate-y-1">
-              <div className="w-14 h-14 hex bg-gradient-honey grid place-items-center text-2xl mb-5 shadow-honey">
-                {f.e}
+      {/* PREVIEW SECTION */}
+      <section id="preview" className="bg-background border-y border-foreground">
+        <div className="max-w-[1400px] mx-auto px-6 py-16 grid lg:grid-cols-[1fr_1.2fr] gap-10 items-center">
+          <div>
+            <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground mb-4">
+              / 002 — Interactive
+            </div>
+            <h2 className="font-display text-6xl sm:text-7xl leading-[0.9] mb-6">
+              TAP A<br />CELL.<br />OWN THE<br />WEEK.
+            </h2>
+            <p className="text-base text-muted-foreground max-w-md leading-relaxed">
+              This isn't a screenshot. Log a habit below — every cell you fill compounds.
+              That's the whole product.
+            </p>
+            <div className="mt-8 flex items-center gap-6">
+              <div>
+                <div className="font-display text-4xl">12K+</div>
+                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-1">Athletes</div>
               </div>
-              <h3 className="text-xl font-bold mb-2">{f.t}</h3>
-              <p className="text-muted-foreground leading-relaxed">{f.d}</p>
+              <div className="w-px h-12 bg-foreground/20" />
+              <div>
+                <div className="font-display text-4xl">4.9</div>
+                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-1">Rating</div>
+              </div>
+              <div className="w-px h-12 bg-foreground/20" />
+              <div>
+                <div className="font-display text-4xl">∞</div>
+                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-1">Free</div>
+              </div>
+            </div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <HabitComb />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* MANIFESTO marquee */}
+      <section id="manifesto" className="bg-foreground text-background py-20 overflow-hidden">
+        <div className="marquee-track whitespace-nowrap font-display text-[14vw] leading-none tracking-tighter">
+          {Array.from({ length: 2 }).map((_, k) => (
+            <span key={k} className="inline-flex items-center">
+              <span className="px-8">SHOW UP.</span>
+              <span className="px-8 opacity-30">·</span>
+              <span className="px-8 italic">FILL THE CELL.</span>
+              <span className="px-8 opacity-30">·</span>
+              <span className="px-8">REPEAT.</span>
+              <span className="px-8 opacity-30">·</span>
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* FEATURES */}
+      <section id="features" className="max-w-[1400px] mx-auto px-6 py-24">
+        <div className="grid md:grid-cols-[1fr_2fr] gap-10 mb-16">
+          <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground">
+            / 003 — The System
+          </div>
+          <h2 className="font-display text-6xl sm:text-7xl leading-[0.9]">
+            BUILT FOR<br />REPETITION.
+          </h2>
+        </div>
+
+        <div className="grid md:grid-cols-3 border-t border-foreground">
+          {[
+            { n: "01", t: "GRID", d: "Your week is a 7-cell grid. Fill it. Don't break the row." },
+            { n: "02", t: "STREAKS", d: "Cold, honest counters. No celebratory animations. Just numbers that climb." },
+            { n: "03", t: "REPORTS", d: "Weekly drops on Sunday. What you did. What you skipped. What you'll attack next." },
+          ].map((f) => (
+            <div key={f.n} className="border-b md:border-b-0 md:border-r last:border-r-0 border-foreground py-10 px-6 group hover:bg-foreground hover:text-background transition-colors">
+              <div className="text-xs font-bold tracking-[0.3em] mb-16">{f.n}</div>
+              <div className="font-display text-4xl mb-4">{f.t}</div>
+              <p className="text-sm leading-relaxed opacity-80 max-w-xs">{f.d}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* CTA */}
-      <section className="relative max-w-6xl mx-auto px-6 pb-24">
-        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-honey p-10 sm:p-16 text-center shadow-honey">
-          <div className="absolute -top-10 -right-10 w-48 h-48 hex bg-background/10" />
-          <div className="absolute -bottom-16 -left-10 w-56 h-56 hex bg-background/10" />
-          <div className="relative">
-            <h2 className="text-4xl sm:text-5xl font-bold text-foreground max-w-2xl mx-auto leading-tight">
-              Start your first cell today.
-            </h2>
-            <p className="mt-4 text-foreground/80 max-w-lg mx-auto">
-              Download HabitComb and turn one small action into a beautiful, buzzing routine.
+      <section className="bg-foreground text-background">
+        <div className="max-w-[1400px] mx-auto px-6 py-24 grid md:grid-cols-2 gap-10 items-end">
+          <h2 className="font-display text-6xl sm:text-8xl leading-[0.85]">
+            START<br />
+            <span className="italic">DAY 001.</span>
+          </h2>
+          <div className="flex flex-col gap-6 md:items-end">
+            <p className="text-base text-background/70 max-w-sm md:text-right">
+              Free. No ads. No streak-saving microtransactions. Just the grid.
             </p>
-            <div className="mt-8 flex justify-center">
-              <StoreButtons />
-            </div>
+            <StoreButtons invert />
           </div>
         </div>
       </section>
 
-      <footer className="border-t">
-        <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+      {/* Footer */}
+      <footer className="bg-background border-t border-foreground/10">
+        <div className="max-w-[1400px] mx-auto px-6 py-10 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 hex bg-gradient-honey" />
-            <span className="font-semibold text-foreground">HabitComb</span>
-            <span>© 2026</span>
+            <div className="w-5 h-5 hex bg-foreground" />
+            <span className="font-display text-lg">HABITCOMB</span>
+            <span className="text-xs text-muted-foreground ml-2">© 2026</span>
           </div>
-          <div className="flex gap-6">
+          <div className="flex gap-6 text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground">
             <a href="#" className="hover:text-foreground">Privacy</a>
             <a href="#" className="hover:text-foreground">Terms</a>
+            <a href="#" className="hover:text-foreground">Press</a>
             <a href="#" className="hover:text-foreground">Contact</a>
           </div>
         </div>
