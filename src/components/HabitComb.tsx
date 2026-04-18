@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 type Habit = {
   id: string;
@@ -16,6 +16,30 @@ const seed: Habit[] = [
 ];
 
 const dayLabels = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+
+// Pointy-top hex geometry
+// For a hex with "size" = circumradius (center to vertex):
+//   width  = sqrt(3) * size
+//   height = 2 * size
+// Tightly packed: horizontal step = width, vertical step = 1.5 * size
+// Odd rows are offset by width/2.
+const SIZE = 26; // circumradius
+const HEX_W = Math.sqrt(3) * SIZE; // ~45.03
+const HEX_H = 2 * SIZE; // 52
+const ROW_STEP = 1.5 * SIZE; // 39
+const COLS = 7;
+const PAD = 4;
+
+function hexPath(cx: number, cy: number, s: number) {
+  const pts: string[] = [];
+  for (let i = 0; i < 6; i++) {
+    const angle = (Math.PI / 180) * (60 * i - 90); // pointy-top
+    const x = cx + s * Math.cos(angle);
+    const y = cy + s * Math.sin(angle);
+    pts.push(`${x.toFixed(2)},${y.toFixed(2)}`);
+  }
+  return `M${pts.join(" L")} Z`;
+}
 
 export function HabitComb() {
   const [habits, setHabits] = useState(seed);
@@ -34,6 +58,10 @@ export function HabitComb() {
   const pct = Math.round((done / total) * 100);
   const longest = Math.max(...habits.map((h) => longestStreak(h.days)));
 
+  // SVG viewBox dimensions
+  const svgW = HEX_W * COLS + HEX_W / 2 + PAD * 2;
+  const svgH = ROW_STEP * (habits.length - 1) + HEX_H + PAD * 2;
+
   return (
     <div className="bg-foreground text-background p-6 sm:p-8">
       {/* Header */}
@@ -42,79 +70,105 @@ export function HabitComb() {
           <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-background/60">
             Week 16 · Live
           </div>
-          <div className="font-display text-5xl sm:text-6xl mt-2">{pct}<span className="text-2xl">%</span></div>
+          <div className="font-display text-5xl sm:text-6xl mt-2">
+            {pct}
+            <span className="text-2xl">%</span>
+          </div>
         </div>
         <div className="text-right">
           <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-background/60">Streak</div>
-          <div className="font-display text-3xl mt-2">{longest} <span className="text-sm">DAYS</span></div>
+          <div className="font-display text-3xl mt-2">
+            {longest} <span className="text-sm">DAYS</span>
+          </div>
         </div>
       </div>
 
-      {/* Day header */}
-      <div className="grid grid-cols-[110px_repeat(7,minmax(0,1fr))] gap-x-1 mb-3 pl-2">
-        <div />
+      {/* Day labels — aligned to columns of row 0 (no offset) */}
+      <div className="flex mb-3" style={{ paddingLeft: PAD }}>
         {dayLabels.map((d, i) => (
           <div
             key={i}
             className={`text-center text-[9px] font-bold tracking-wider ${
               i === todayIdx ? "text-background" : "text-background/40"
             }`}
+            style={{ width: HEX_W }}
           >
             {d}
           </div>
         ))}
       </div>
 
-      {/* Habit rows — hexagonal hive */}
-      <div className="space-y-2">
-        {habits.map((habit, rowIdx) => (
-          <div
-            key={habit.id}
-            className="grid grid-cols-[110px_repeat(7,minmax(0,1fr))] gap-x-1 items-center"
-          >
-            <div className="py-2 pr-2 min-w-0">
-              <div className="font-bold text-sm truncate uppercase tracking-wide">{habit.name}</div>
-              <div className="text-[10px] text-background/50 font-bold tracking-wider">{habit.tag}</div>
+      {/* Habit labels + Hive */}
+      <div className="flex gap-4 items-start">
+        <div className="flex flex-col" style={{ paddingTop: PAD }}>
+          {habits.map((habit, rowIdx) => (
+            <div
+              key={habit.id}
+              className="flex flex-col justify-center"
+              style={{
+                height: rowIdx === habits.length - 1 ? HEX_H : ROW_STEP,
+              }}
+            >
+              <div className="font-bold text-xs uppercase tracking-wide whitespace-nowrap">
+                {habit.name}
+              </div>
+              <div className="text-[9px] text-background/50 font-bold tracking-wider">
+                {habit.tag}
+              </div>
             </div>
-            {habit.days.map((d, i) => (
-              <button
-                key={i}
-                onClick={() => toggle(habit.id, i)}
-                className="relative aspect-square group"
-                style={{ transform: rowIdx % 2 === 1 ? "translateX(50%)" : undefined }}
-                aria-label={`Toggle ${habit.name} ${dayLabels[i]}`}
-              >
-                <motion.div
-                  whileTap={{ scale: 0.9 }}
-                  className={`absolute inset-0 hex transition-colors ${
-                    d ? "bg-background" : "bg-background/10 group-hover:bg-background/25"
-                  }`}
-                />
-                {i === todayIdx && !d && (
-                  <div className="absolute inset-[3px] hex bg-foreground" />
-                )}
-                {i === todayIdx && !d && (
-                  <div className="absolute inset-[4px] hex bg-background/0 border border-background/60" style={{ clipPath: "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)" }} />
-                )}
-                <AnimatePresence>
-                  {d && (
-                    <motion.div
-                      key="x"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      exit={{ scale: 0 }}
-                      className="absolute inset-0 grid place-items-center"
-                    >
-                      <svg viewBox="0 0 24 24" className="w-4 h-4 text-foreground" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square">
-                        <path d="M6 6 L18 18 M18 6 L6 18" />
-                      </svg>
-                    </motion.div>
+          ))}
+        </div>
+
+        <svg
+          viewBox={`0 0 ${svgW} ${svgH}`}
+          className="flex-1 w-full h-auto overflow-visible"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {habits.map((habit, rowIdx) => {
+            const rowOffset = rowIdx % 2 === 1 ? HEX_W / 2 : 0;
+            const cy = PAD + SIZE + rowIdx * ROW_STEP;
+            return habit.days.map((d, i) => {
+              const cx = PAD + HEX_W / 2 + rowOffset + i * HEX_W;
+              const isToday = i === todayIdx;
+              return (
+                <g
+                  key={`${habit.id}-${i}`}
+                  onClick={() => toggle(habit.id, i)}
+                  className="cursor-pointer"
+                >
+                  <motion.path
+                    d={hexPath(cx, cy, SIZE - 1.5)}
+                    fill={d ? "var(--color-background)" : "rgba(255,255,255,0.08)"}
+                    stroke="var(--color-foreground)"
+                    strokeWidth={2}
+                    whileHover={{ opacity: 0.85 }}
+                    whileTap={{ scale: 0.92, originX: cx / svgW, originY: cy / svgH }}
+                    style={{ transformBox: "fill-box", transformOrigin: `${cx}px ${cy}px` }}
+                  />
+                  {isToday && !d && (
+                    <path
+                      d={hexPath(cx, cy, SIZE - 5)}
+                      fill="none"
+                      stroke="var(--color-background)"
+                      strokeWidth={1}
+                      opacity={0.7}
+                    />
                   )}
-                </AnimatePresence>
-              </button>
-            ))}
-          </div>
-        ))}
+                  {d && (
+                    <g
+                      stroke="var(--color-foreground)"
+                      strokeWidth={2.5}
+                      strokeLinecap="square"
+                    >
+                      <line x1={cx - 6} y1={cy - 6} x2={cx + 6} y2={cy + 6} />
+                      <line x1={cx + 6} y1={cy - 6} x2={cx - 6} y2={cy + 6} />
+                    </g>
+                  )}
+                </g>
+              );
+            });
+          })}
+        </svg>
       </div>
 
       {/* Footer */}
@@ -122,7 +176,9 @@ export function HabitComb() {
         <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-background/60">
           Tap to log · Just do it
         </div>
-        <div className="text-[10px] font-bold tracking-wider text-background/60">{done}/{total}</div>
+        <div className="text-[10px] font-bold tracking-wider text-background/60">
+          {done}/{total}
+        </div>
       </div>
     </div>
   );
