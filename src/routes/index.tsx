@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { HabitComb } from "@/components/HabitComb";
 import { StoreButtons } from "@/components/StoreButtons";
+import logo from "@/assets/habitcomb-logo.png";
 
 export const Route = createFileRoute("/")({
   component: Index,
