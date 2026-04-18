@@ -29,8 +29,8 @@ function Index() {
       {/* Nav */}
       <nav className="sticky top-0 z-40 bg-background/90 backdrop-blur border-b border-foreground/10">
         <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 h-16">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 hex bg-foreground" />
+          <div className="flex items-center gap-2.5">
+            <img src={logo} alt="HabitComb" className="w-8 h-8 bg-foreground p-0.5" />
             <span className="font-display text-2xl tracking-tight">HABITCOMB</span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-[0.2em]">
