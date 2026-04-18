@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { HabitComb } from "@/components/HabitComb";
 import { StoreButtons } from "@/components/StoreButtons";
+import logo from "@/assets/habitcomb-logo.png";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -28,8 +29,8 @@ function Index() {
       {/* Nav */}
       <nav className="sticky top-0 z-40 bg-background/90 backdrop-blur border-b border-foreground/10">
         <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 h-16">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 hex bg-foreground" />
+          <div className="flex items-center gap-2.5">
+            <img src={logo} alt="HabitComb" className="w-8 h-8 bg-foreground p-0.5" />
             <span className="font-display text-2xl tracking-tight">HABITCOMB</span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-[0.2em]">
@@ -182,7 +183,7 @@ function Index() {
       <footer className="bg-background border-t border-foreground/10">
         <div className="max-w-[1400px] mx-auto px-6 py-10 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 hex bg-foreground" />
+            <img src={logo} alt="HabitComb" className="w-6 h-6 bg-foreground p-0.5" />
             <span className="font-display text-lg">HABITCOMB</span>
             <span className="text-xs text-muted-foreground ml-2">© 2026</span>
           </div>
