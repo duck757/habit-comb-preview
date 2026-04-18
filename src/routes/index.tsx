@@ -183,7 +183,7 @@ function Index() {
       <footer className="bg-background border-t border-foreground/10">
         <div className="max-w-[1400px] mx-auto px-6 py-10 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 hex bg-foreground" />
+            <img src={logo} alt="HabitComb" className="w-6 h-6 bg-foreground p-0.5" />
             <span className="font-display text-lg">HABITCOMB</span>
             <span className="text-xs text-muted-foreground ml-2">© 2026</span>
           </div>
