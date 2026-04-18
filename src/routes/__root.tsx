@@ -29,14 +29,14 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "HabitComb — Build sweet habits, one cell at a time" },
+      { name: "description", content: "HabitComb is a delightful habit tracker shaped like a honeycomb. Log streaks, build routines, and watch your comb fill up." },
+      { name: "author", content: "HabitComb" },
+      { property: "og:title", content: "HabitComb — Build sweet habits" },
+      { property: "og:description", content: "Track habits in a beautiful honeycomb. Daily streaks, gentle nudges, real progress." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:site", content: "@HabitComb" },
     ],
     links: [
       {
