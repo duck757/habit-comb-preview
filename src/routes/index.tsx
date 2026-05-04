@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { Star, Camera, Flame, BarChart3 } from "lucide-react";
 import { HabitComb } from "@/components/HabitComb";
 import { StoreButtons } from "@/components/StoreButtons";
 import logo from "@/assets/habitcomb-logo.png";
@@ -10,184 +11,252 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <main className="bg-background text-foreground">
-      {/* Top ticker */}
-      <div className="bg-foreground text-background overflow-hidden border-b border-foreground">
-        <div className="marquee-track whitespace-nowrap py-2 text-xs font-bold uppercase tracking-[0.3em]">
-          {Array.from({ length: 2 }).map((_, k) => (
-            <span key={k} className="inline-flex">
-              {["Discipline > Motivation", "Build the comb", "Day 001", "No excuses", "Now in beta", "Ship your streak"].map((t, i) => (
-                <span key={i} className="px-8 inline-flex items-center gap-8">
-                  {t}<span className="opacity-40">/</span>
-                </span>
-              ))}
-            </span>
-          ))}
-        </div>
-      </div>
-
+    <main className="bg-background text-foreground overflow-hidden">
       {/* Nav */}
-      <nav className="sticky top-0 z-40 bg-background/90 backdrop-blur border-b border-foreground/10">
-        <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 h-16">
-          <div className="flex items-center gap-2.5">
-            <img src={logo} alt="HabitComb" className="w-8 h-8 bg-foreground p-0.5" />
-            <span className="font-display text-2xl tracking-tight">HABITCOMB</span>
+      <nav className="sticky top-0 z-40 bg-background/80 backdrop-blur-xl">
+        <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-20">
+          <div className="flex items-center gap-2">
+            <img src={logo} alt="HabitComb" className="w-9 h-9 rounded-xl" />
+            <span className="text-xl font-bold tracking-tight">HabitComb</span>
           </div>
-          <div className="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-[0.2em]">
-            <a href="#manifesto" className="hover:opacity-60">Manifesto</a>
-            <a href="#preview" className="hover:opacity-60">Preview</a>
-            <a href="#features" className="hover:opacity-60">System</a>
-            <a href="#download" className="hover:opacity-60">Get App</a>
+          <div className="hidden md:flex items-center gap-10 text-sm font-semibold text-muted-foreground">
+            <a href="#" className="hover:text-foreground transition-colors">Home</a>
+            <a href="#features" className="hover:text-foreground transition-colors">Features</a>
+            <a href="#preview" className="hover:text-foreground transition-colors">Preview</a>
+            <a href="#download" className="hover:text-foreground transition-colors">Download</a>
           </div>
-          <a href="#download" className="hidden sm:inline-block bg-foreground text-background px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] hover:opacity-80">
-            Download
+          <a
+            href="#download"
+            className="hidden sm:inline-flex bg-foreground text-white rounded-full px-5 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity"
+          >
+            Get the app
           </a>
         </div>
       </nav>
 
       {/* HERO */}
-      <section className="relative max-w-[1400px] mx-auto px-6 pt-12 pb-20">
-        <div className="flex items-start justify-between mb-8">
-          <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground">
-            Vol. 01 — The Habit Issue
-          </div>
-          <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground hidden sm:block">
-            Est. 2026 / iOS · Android
-          </div>
-        </div>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="font-display text-[20vw] sm:text-[16vw] lg:text-[200px] leading-[0.85] tracking-tighter"
-        >
-          BUILD<br />
-          THE<br />
-          <span className="italic" style={{ fontStyle: "italic" }}>COMB.</span>
-        </motion.h1>
-
-        <div className="mt-10 grid md:grid-cols-[2fr_1fr] gap-8 items-end border-t border-foreground pt-8">
-          <p className="text-lg sm:text-xl max-w-xl leading-snug font-medium">
-            One cell. One day. One rep. HabitComb is the habit tracker for people who don't need a pep talk —
-            just a clean grid and the discipline to fill it.
-          </p>
-          <div id="download" className="flex flex-col gap-3">
-            <StoreButtons />
-          </div>
-        </div>
-      </section>
-
-      {/* PREVIEW SECTION */}
-      <section id="preview" className="bg-background border-y border-foreground">
-        <div className="max-w-[1400px] mx-auto px-6 py-16 grid lg:grid-cols-[1fr_1.2fr] gap-10 items-center">
+      <section className="relative">
+        <div
+          className="absolute inset-0 -z-10 opacity-70"
+          style={{ background: "var(--gradient-radial)" }}
+        />
+        <div className="max-w-6xl mx-auto px-6 pt-12 pb-24 grid lg:grid-cols-2 gap-12 items-center">
+          {/* LEFT */}
           <div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground mb-4">
-              / 002 — Interactive
-            </div>
-            <h2 className="font-display text-6xl sm:text-7xl leading-[0.9] mb-6">
-              TAP A<br />CELL.<br />OWN THE<br />WEEK.
-            </h2>
-            <p className="text-base text-muted-foreground max-w-md leading-relaxed">
-              This isn't a screenshot. Log a habit below — every cell you fill compounds.
-              That's the whole product.
+            {/* Social proof pill */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-3 bg-secondary rounded-full pl-2 pr-5 py-2 mb-8"
+            >
+              <div className="flex -space-x-2">
+                {["#fbbf24", "#f59e0b", "#fcd34d"].map((c, i) => (
+                  <div
+                    key={i}
+                    className="w-7 h-7 rounded-full border-2 border-background"
+                    style={{ background: c }}
+                  />
+                ))}
+              </div>
+              <div className="flex items-center gap-1.5 text-sm font-medium">
+                <span>Loved by 12K+ users</span>
+                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                <span className="font-bold">4.9</span>
+              </div>
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tighter leading-[1.02]"
+            >
+              Meet HabitComb
+              <br />
+              <span className="text-muted-foreground">Build sweet habits,</span>
+              <br />
+              one cell at a time
+            </motion.h1>
+
+            <p className="mt-6 text-lg text-muted-foreground max-w-lg leading-relaxed">
+              The friendly habit tracker that turns your week into a honeycomb.
+              Tap a cell, build a streak, watch your comb fill up — it's that simple.
             </p>
-            <div className="mt-8 flex items-center gap-6">
-              <div>
-                <div className="font-display text-4xl">12K+</div>
-                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-1">Athletes</div>
-              </div>
-              <div className="w-px h-12 bg-foreground/20" />
-              <div>
-                <div className="font-display text-4xl">4.9</div>
-                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-1">Rating</div>
-              </div>
-              <div className="w-px h-12 bg-foreground/20" />
-              <div>
-                <div className="font-display text-4xl">∞</div>
-                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-1">Free</div>
-              </div>
+
+            <div id="download" className="mt-8">
+              <StoreButtons />
             </div>
           </div>
 
+          {/* RIGHT — phone mockup with honeycomb */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="relative flex justify-center lg:justify-end"
           >
-            <HabitComb />
+            {/* Floating tags */}
+            <motion.div
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 4, repeat: Infinity }}
+              className="absolute top-4 left-0 lg:left-4 z-20 bg-white rounded-2xl shadow-comb px-4 py-2.5 text-sm font-semibold flex items-center gap-2"
+            >
+              <Flame className="w-4 h-4 text-amber-500" />
+              7-day streak
+            </motion.div>
+
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 4, repeat: Infinity, delay: 1 }}
+              className="absolute bottom-10 right-0 lg:right-4 z-20 bg-white rounded-2xl shadow-comb px-4 py-2.5 text-sm font-semibold flex items-center gap-2"
+            >
+              <span className="w-2 h-2 rounded-full bg-amber-400" />
+              +1 cell filled
+            </motion.div>
+
+            {/* Phone frame */}
+            <div className="relative w-[320px] sm:w-[360px] bg-foreground rounded-[3rem] p-3 shadow-honey">
+              <div className="bg-foreground rounded-[2.4rem] overflow-hidden">
+                <div className="h-6 flex items-center justify-center">
+                  <div className="w-24 h-5 bg-black rounded-full" />
+                </div>
+                <HabitComb />
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* MANIFESTO marquee */}
-      <section id="manifesto" className="bg-foreground text-background py-20 overflow-hidden">
-        <div className="marquee-track whitespace-nowrap font-display text-[14vw] leading-none tracking-tighter">
-          {Array.from({ length: 2 }).map((_, k) => (
-            <span key={k} className="inline-flex items-center">
-              <span className="px-8">SHOW UP.</span>
-              <span className="px-8 opacity-30">·</span>
-              <span className="px-8 italic">FILL THE CELL.</span>
-              <span className="px-8 opacity-30">·</span>
-              <span className="px-8">REPEAT.</span>
-              <span className="px-8 opacity-30">·</span>
-            </span>
-          ))}
+      {/* TRUSTED BY */}
+      <section className="border-y border-border bg-secondary/40">
+        <div className="max-w-6xl mx-auto px-6 py-10 flex flex-wrap items-center justify-center gap-x-12 gap-y-4 text-sm font-semibold text-muted-foreground">
+          <span className="text-foreground">As seen in</span>
+          <span>Product Hunt</span>
+          <span>·</span>
+          <span>The Verge</span>
+          <span>·</span>
+          <span>Lifehacker</span>
+          <span>·</span>
+          <span>Wired</span>
+          <span>·</span>
+          <span>Fast Company</span>
         </div>
       </section>
 
       {/* FEATURES */}
-      <section id="features" className="max-w-[1400px] mx-auto px-6 py-24">
-        <div className="grid md:grid-cols-[1fr_2fr] gap-10 mb-16">
-          <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground">
-            / 003 — The System
+      <section id="features" className="max-w-6xl mx-auto px-6 py-24">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <div className="inline-block bg-secondary rounded-full px-4 py-1.5 text-xs font-bold text-muted-foreground mb-4">
+            HOW IT WORKS
           </div>
-          <h2 className="font-display text-6xl sm:text-7xl leading-[0.9]">
-            BUILT FOR<br />REPETITION.
+          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
+            Tracking habits has never been this satisfying
           </h2>
+          <p className="mt-4 text-muted-foreground text-lg">
+            Three taps. Zero friction. A whole new way to see your week.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-3 border-t border-foreground">
+        <div className="grid md:grid-cols-3 gap-6">
           {[
-            { n: "01", t: "GRID", d: "Your week is a 7-cell grid. Fill it. Don't break the row." },
-            { n: "02", t: "STREAKS", d: "Cold, honest counters. No celebratory animations. Just numbers that climb." },
-            { n: "03", t: "REPORTS", d: "Weekly drops on Sunday. What you did. What you skipped. What you'll attack next." },
+            {
+              icon: <Camera className="w-6 h-6" />,
+              t: "Tap a cell",
+              d: "Each day is a hexagon. Tap to log — no menus, no friction.",
+            },
+            {
+              icon: <Flame className="w-6 h-6" />,
+              t: "Build streaks",
+              d: "Watch your comb fill up as your habits compound, day by day.",
+            },
+            {
+              icon: <BarChart3 className="w-6 h-6" />,
+              t: "See progress",
+              d: "Weekly drops every Sunday — clean stats, zero noise.",
+            },
           ].map((f) => (
-            <div key={f.n} className="border-b md:border-b-0 md:border-r last:border-r-0 border-foreground py-10 px-6 group hover:bg-foreground hover:text-background transition-colors">
-              <div className="text-xs font-bold tracking-[0.3em] mb-16">{f.n}</div>
-              <div className="font-display text-4xl mb-4">{f.t}</div>
-              <p className="text-sm leading-relaxed opacity-80 max-w-xs">{f.d}</p>
+            <div
+              key={f.t}
+              className="bg-secondary/60 rounded-3xl p-8 hover:bg-secondary transition-colors"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-foreground text-white flex items-center justify-center mb-5">
+                {f.icon}
+              </div>
+              <div className="text-xl font-bold mb-2">{f.t}</div>
+              <p className="text-muted-foreground text-sm leading-relaxed">{f.d}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-foreground text-background">
-        <div className="max-w-[1400px] mx-auto px-6 py-24 grid md:grid-cols-2 gap-10 items-end">
-          <h2 className="font-display text-6xl sm:text-8xl leading-[0.85]">
-            START<br />
-            <span className="italic">DAY 001.</span>
-          </h2>
-          <div className="flex flex-col gap-6 md:items-end">
-            <p className="text-base text-background/70 max-w-sm md:text-right">
-              Free. No ads. No streak-saving microtransactions. Just the grid.
+      {/* INTERACTIVE PREVIEW */}
+      <section id="preview" className="max-w-6xl mx-auto px-6 pb-24">
+        <div className="bg-secondary/50 rounded-[2.5rem] p-8 sm:p-14 grid lg:grid-cols-2 gap-10 items-center">
+          <div>
+            <div className="inline-block bg-background rounded-full px-4 py-1.5 text-xs font-bold text-muted-foreground mb-4">
+              TRY IT LIVE
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
+              This isn't a screenshot.
+              <br />
+              <span className="text-muted-foreground">Tap a cell.</span>
+            </h2>
+            <p className="mt-4 text-muted-foreground text-lg max-w-md">
+              Every cell you fill is a small win. That's the whole product —
+              and it works.
             </p>
-            <StoreButtons invert />
+            <div className="mt-8 flex gap-8">
+              <div>
+                <div className="text-3xl font-extrabold">12K+</div>
+                <div className="text-xs font-semibold text-muted-foreground mt-1">USERS</div>
+              </div>
+              <div>
+                <div className="text-3xl font-extrabold">4.9★</div>
+                <div className="text-xs font-semibold text-muted-foreground mt-1">RATING</div>
+              </div>
+              <div>
+                <div className="text-3xl font-extrabold">Free</div>
+                <div className="text-xs font-semibold text-muted-foreground mt-1">FOREVER</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-foreground rounded-3xl overflow-hidden shadow-honey">
+            <HabitComb />
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="max-w-6xl mx-auto px-6 pb-24">
+        <div className="bg-foreground text-white rounded-[2.5rem] p-10 sm:p-16 text-center relative overflow-hidden">
+          <div
+            className="absolute inset-0 opacity-30"
+            style={{ background: "var(--gradient-honey)" }}
+          />
+          <div className="relative">
+            <h2 className="text-4xl sm:text-6xl font-extrabold tracking-tight max-w-2xl mx-auto">
+              Start your first cell today.
+            </h2>
+            <p className="mt-4 text-white/70 text-lg max-w-md mx-auto">
+              Free forever. No ads. Just you and your comb.
+            </p>
+            <div className="mt-8 flex justify-center">
+              <StoreButtons invert />
+            </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-background border-t border-foreground/10">
-        <div className="max-w-[1400px] mx-auto px-6 py-10 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <footer className="border-t border-border">
+        <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
-            <img src={logo} alt="HabitComb" className="w-6 h-6 bg-foreground p-0.5" />
-            <span className="font-display text-lg">HABITCOMB</span>
-            <span className="text-xs text-muted-foreground ml-2">© 2026</span>
+            <img src={logo} alt="HabitComb" className="w-7 h-7 rounded-lg" />
+            <span className="font-bold">HabitComb</span>
+            <span className="text-sm text-muted-foreground ml-2">© 2026</span>
           </div>
-          <div className="flex gap-6 text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground">
+          <div className="flex gap-6 text-sm font-semibold text-muted-foreground">
             <a href="#" className="hover:text-foreground">Privacy</a>
             <a href="#" className="hover:text-foreground">Terms</a>
             <a href="#" className="hover:text-foreground">Press</a>
