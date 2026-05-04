@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import { Star, Camera, Flame, BarChart3 } from "lucide-react";
 import { HabitComb } from "@/components/HabitComb";
 import { StoreButtons } from "@/components/StoreButtons";
@@ -9,7 +10,19 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+const goals = [
+  { goal: "Run 5K every morning", color: "#fde68a", rotate: -6 },
+  { goal: "Read 20 minutes daily", color: "#fcd34d", rotate: 4 },
+  { goal: "Drink 3L of water", color: "#fbbf24", rotate: -3 },
+  { goal: "Train strength 4×/week", color: "#fef08a", rotate: 7 },
+  { goal: "Sleep before 11 PM", color: "#fed7aa", rotate: -5 },
+];
+
 function Index() {
+  const [revealed, setRevealed] = useState<boolean[]>([false, false, false, false, false]);
+  const toggleNote = (i: number) =>
+    setRevealed((r) => r.map((v, idx) => (idx === i ? !v : v)));
+
   return (
     <main className="bg-background text-foreground overflow-hidden">
       {/* Nav */}
@@ -88,41 +101,71 @@ function Index() {
             </div>
           </div>
 
-          {/* RIGHT — phone mockup with honeycomb */}
+          {/* RIGHT — interactive sticky notes */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="relative flex justify-center lg:justify-end"
+            className="relative h-[480px] sm:h-[520px] flex items-center justify-center"
           >
-            {/* Floating tags */}
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 4, repeat: Infinity }}
-              className="absolute top-4 left-0 lg:left-4 z-20 bg-white rounded-2xl shadow-comb px-4 py-2.5 text-sm font-semibold flex items-center gap-2"
-            >
-              <Flame className="w-4 h-4 text-amber-500" />
-              7-day streak
-            </motion.div>
-
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 4, repeat: Infinity, delay: 1 }}
-              className="absolute bottom-10 right-0 lg:right-4 z-20 bg-white rounded-2xl shadow-comb px-4 py-2.5 text-sm font-semibold flex items-center gap-2"
-            >
-              <span className="w-2 h-2 rounded-full bg-amber-400" />
-              +1 cell filled
-            </motion.div>
-
-            {/* Phone frame */}
-            <div className="relative w-[320px] sm:w-[360px] bg-foreground rounded-[3rem] p-3 shadow-honey">
-              <div className="bg-foreground rounded-[2.4rem] overflow-hidden">
-                <div className="h-6 flex items-center justify-center">
-                  <div className="w-24 h-5 bg-black rounded-full" />
-                </div>
-                <HabitComb />
-              </div>
+            <div className="absolute -top-2 left-1/2 -translate-x-1/2 text-xs font-bold tracking-[0.25em] text-muted-foreground uppercase">
+              Tap a note ↓
             </div>
+            {goals.map((g, i) => {
+              // Scattered positions (percentages)
+              const positions = [
+                { top: "8%", left: "4%" },
+                { top: "12%", right: "6%" },
+                { top: "44%", left: "22%" },
+                { bottom: "10%", left: "0%" },
+                { bottom: "6%", right: "8%" },
+              ];
+              const pos = positions[i];
+              const isOpen = revealed[i];
+              return (
+                <motion.button
+                  key={i}
+                  onClick={() => toggleNote(i)}
+                  initial={{ rotate: g.rotate, scale: 0, y: -20 }}
+                  animate={{ rotate: g.rotate, scale: 1, y: 0 }}
+                  transition={{ delay: 0.2 + i * 0.08, type: "spring", stiffness: 200 }}
+                  whileHover={{ scale: 1.06, rotate: g.rotate * 0.4, zIndex: 30 }}
+                  whileTap={{ scale: 0.96 }}
+                  className="absolute w-40 h-40 sm:w-44 sm:h-44 p-4 flex items-center justify-center text-center font-bold text-foreground/90 cursor-pointer select-none"
+                  style={{
+                    ...pos,
+                    background: g.color,
+                    boxShadow:
+                      "0 12px 24px -8px rgba(120, 80, 0, 0.25), 0 4px 8px -2px rgba(120, 80, 0, 0.15)",
+                    zIndex: isOpen ? 25 : 10 + i,
+                  }}
+                >
+                  <AnimatePresence mode="wait">
+                    {isOpen ? (
+                      <motion.span
+                        key="goal"
+                        initial={{ opacity: 0, scale: 0.7 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.7 }}
+                        className="text-sm sm:text-base leading-snug"
+                      >
+                        {g.goal}
+                      </motion.span>
+                    ) : (
+                      <motion.span
+                        key="empty"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="text-3xl text-foreground/30"
+                      >
+                        ?
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
+              );
+            })}
           </motion.div>
         </div>
       </section>
