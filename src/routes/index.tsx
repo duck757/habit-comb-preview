@@ -199,7 +199,7 @@ function Index() {
             <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
               This isn't a screenshot.
               <br />
-              <span className="text-muted-foreground">Tap a cell.</span>
+              <span className="text-accent">Tap a cell.</span>
             </h2>
             <p className="mt-4 text-muted-foreground text-lg max-w-md">
               Every cell you fill is a small win. That's the whole product —
