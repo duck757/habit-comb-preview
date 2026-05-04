@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import { Star, Camera, Flame, BarChart3 } from "lucide-react";
 import { HabitComb } from "@/components/HabitComb";
 import { StoreButtons } from "@/components/StoreButtons";
