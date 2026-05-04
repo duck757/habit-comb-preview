@@ -10,8 +10,18 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+const goals = [
+  { goal: "Run 5K every morning", color: "#fde68a", rotate: -6 },
+  { goal: "Read 20 minutes daily", color: "#fcd34d", rotate: 4 },
+  { goal: "Drink 3L of water", color: "#fbbf24", rotate: -3 },
+  { goal: "Train strength 4×/week", color: "#fef08a", rotate: 7 },
+  { goal: "Sleep before 11 PM", color: "#fed7aa", rotate: -5 },
+];
+
 function Index() {
-  return (
+  const [revealed, setRevealed] = useState<boolean[]>([false, false, false, false, false]);
+  const toggleNote = (i: number) =>
+    setRevealed((r) => r.map((v, idx) => (idx === i ? !v : v)));
     <main className="bg-background text-foreground overflow-hidden">
       {/* Nav */}
       <nav className="sticky top-0 z-40 bg-background/80 backdrop-blur-xl">
