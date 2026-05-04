@@ -232,6 +232,107 @@ function Index() {
         </div>
       </section>
 
+      {/* BRIDGE — sticky notes become hex cells */}
+      <section className="max-w-6xl mx-auto px-6 pb-12">
+        <div className="text-center mb-10">
+          <div className="inline-block bg-secondary rounded-full px-4 py-1.5 text-xs font-bold text-muted-foreground mb-4">
+            FROM GOALS → TO HABITS
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+            Your sticky notes become <span className="text-accent">your comb</span>
+          </h2>
+          <p className="mt-3 text-muted-foreground">Scroll to watch them snap into place ↓</p>
+        </div>
+
+        <div className="relative h-64 sm:h-72 max-w-3xl mx-auto">
+          <svg viewBox="0 0 600 260" className="absolute inset-0 w-full h-full overflow-visible">
+            {/* dashed flow path */}
+            <motion.path
+              d="M 90 50 C 200 50, 200 210, 300 210 S 400 50, 510 50"
+              fill="none"
+              stroke="hsl(var(--accent, 45 95% 55%))"
+              strokeWidth="2"
+              strokeDasharray="6 8"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 1.4, ease: "easeInOut" }}
+              style={{ stroke: "#fbbf24" }}
+            />
+          </svg>
+
+          {/* Sticky notes (left) morphing into hex cells (right) */}
+          {[0, 1, 2].map((i) => {
+            const colors = ["#fde68a", "#fcd34d", "#fbbf24"];
+            const tops = ["8%", "38%", "68%"];
+            return (
+              <motion.div
+                key={`note-${i}`}
+                initial={{ x: 0, rotate: -6 + i * 4, opacity: 1, scale: 1 }}
+                whileInView={{
+                  x: ["0%", "0%", "320%"],
+                  rotate: [-6 + i * 4, -6 + i * 4, 0],
+                  scale: [1, 1, 0.45],
+                  opacity: [1, 1, 0],
+                }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{
+                  duration: 2,
+                  times: [0, 0.3, 1],
+                  delay: 0.2 + i * 0.25,
+                  ease: "easeInOut",
+                }}
+                className="absolute w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center text-xs font-bold text-foreground/70"
+                style={{
+                  top: tops[i],
+                  left: "4%",
+                  background: colors[i],
+                  boxShadow: "0 8px 16px -6px rgba(120,80,0,0.25)",
+                }}
+              >
+                Goal {i + 1}
+              </motion.div>
+            );
+          })}
+
+          {/* Receiving hex cells (right) */}
+          <div className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 flex flex-col gap-2">
+            {[0, 1, 2].map((i) => (
+              <motion.div
+                key={`hex-${i}`}
+                initial={{ scale: 0.6, opacity: 0.25 }}
+                whileInView={{
+                  scale: [0.6, 0.6, 1.15, 1],
+                  opacity: [0.25, 0.25, 1, 1],
+                }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{
+                  duration: 2,
+                  times: [0, 0.6, 0.8, 1],
+                  delay: 0.2 + i * 0.25,
+                  ease: "easeOut",
+                }}
+                className="w-14 h-16 sm:w-16 sm:h-[72px]"
+                style={{
+                  background: ["#fde68a", "#fcd34d", "#fbbf24"][i],
+                  clipPath:
+                    "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
+                  boxShadow: "0 6px 14px -6px rgba(120,80,0,0.35)",
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+          className="mt-2 text-center text-2xl text-muted-foreground"
+        >
+          ↓
+        </motion.div>
+      </section>
+
       {/* INTERACTIVE PREVIEW */}
       <section id="preview" className="max-w-6xl mx-auto px-6 pb-24">
         <div className="bg-secondary/50 rounded-[2.5rem] p-8 sm:p-14 grid lg:grid-cols-2 gap-10 items-center">
