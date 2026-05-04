@@ -73,17 +73,7 @@ function Index() {
             >
               Meet HabitComb
               <br />
-              <span
-                className="bg-clip-text text-transparent"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(90deg, oklch(0.85 0.18 90), oklch(0.92 0.16 95), oklch(0.78 0.19 80))",
-                  filter:
-                    "drop-shadow(0 0 18px oklch(0.88 0.18 90 / 0.55)) drop-shadow(0 0 4px oklch(0.92 0.16 95 / 0.6))",
-                }}
-              >
-                Build sweet habits,
-              </span>
+              <span className="text-accent">Build sweet habits,</span>
               <br />
               one cell at a time
             </motion.h1>
