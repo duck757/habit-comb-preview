@@ -83,24 +83,9 @@ export function HabitComb() {
         </div>
       </div>
 
-      {/* Day labels — aligned to columns of row 0 (no offset) */}
-      <div className="flex mb-3" style={{ paddingLeft: PAD }}>
-        {dayLabels.map((d, i) => (
-          <div
-            key={i}
-            className={`text-center text-[9px] font-bold tracking-wider ${
-              i === todayIdx ? "text-background" : "text-background/40"
-            }`}
-            style={{ width: HEX_W }}
-          >
-            {d}
-          </div>
-        ))}
-      </div>
-
       {/* Habit labels + Hive */}
-      <div className="flex gap-4 items-start">
-        <div className="flex flex-col" style={{ paddingTop: PAD }}>
+      <div className="flex gap-3 sm:gap-4 items-start">
+        <div className="flex flex-col shrink-0" style={{ paddingTop: PAD + HEX_H * 0.5 }}>
           {habits.map((habit, rowIdx) => (
             <div
               key={habit.id}
@@ -109,7 +94,7 @@ export function HabitComb() {
                 height: rowIdx === habits.length - 1 ? HEX_H : ROW_STEP,
               }}
             >
-              <div className="font-bold text-xs uppercase tracking-wide whitespace-nowrap">
+              <div className="font-bold text-[11px] sm:text-xs uppercase tracking-wide whitespace-nowrap">
                 {habit.name}
               </div>
               <div className="text-[9px] text-background/50 font-bold tracking-wider">
@@ -119,56 +104,83 @@ export function HabitComb() {
           ))}
         </div>
 
-        <svg
-          viewBox={`0 0 ${svgW} ${svgH}`}
-          className="flex-1 w-full h-auto overflow-visible"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {habits.map((habit, rowIdx) => {
-            const rowOffset = rowIdx % 2 === 1 ? HEX_W / 2 : 0;
-            const cy = PAD + SIZE + rowIdx * ROW_STEP;
-            return habit.days.map((d, i) => {
-              const cx = PAD + HEX_W / 2 + rowOffset + i * HEX_W;
-              const isToday = i === todayIdx;
+        <div className="flex-1 min-w-0">
+          {/* Day labels — aligned to SVG columns, scale with SVG */}
+          <svg
+            viewBox={`0 0 ${svgW} 14`}
+            className="w-full h-auto block mb-2"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {dayLabels.map((d, i) => {
+              const cx = PAD + HEX_W / 2 + i * HEX_W;
               return (
-                <g
-                  key={`${habit.id}-${i}`}
-                  onClick={() => toggle(habit.id, i)}
-                  className="cursor-pointer"
+                <text
+                  key={i}
+                  x={cx}
+                  y={10}
+                  textAnchor="middle"
+                  fontSize={9}
+                  fontWeight={700}
+                  letterSpacing={1}
+                  fill={i === todayIdx ? "var(--color-background)" : "rgba(255,255,255,0.4)"}
                 >
-                  <motion.path
-                    d={hexPath(cx, cy, SIZE - 1.5)}
-                    fill={d ? "var(--color-background)" : "rgba(255,255,255,0.08)"}
-                    stroke="var(--color-foreground)"
-                    strokeWidth={2}
-                    whileHover={{ opacity: 0.85 }}
-                    whileTap={{ scale: 0.92, originX: cx / svgW, originY: cy / svgH }}
-                    style={{ transformBox: "fill-box", transformOrigin: `${cx}px ${cy}px` }}
-                  />
-                  {isToday && !d && (
-                    <path
-                      d={hexPath(cx, cy, SIZE - 5)}
-                      fill="none"
-                      stroke="var(--color-background)"
-                      strokeWidth={1}
-                      opacity={0.7}
-                    />
-                  )}
-                  {d && (
-                    <g
-                      stroke="var(--color-foreground)"
-                      strokeWidth={2.5}
-                      strokeLinecap="square"
-                    >
-                      <line x1={cx - 6} y1={cy - 6} x2={cx + 6} y2={cy + 6} />
-                      <line x1={cx + 6} y1={cy - 6} x2={cx - 6} y2={cy + 6} />
-                    </g>
-                  )}
-                </g>
+                  {d}
+                </text>
               );
-            });
-          })}
-        </svg>
+            })}
+          </svg>
+
+          <svg
+            viewBox={`0 0 ${svgW} ${svgH}`}
+            className="w-full h-auto block overflow-visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {habits.map((habit, rowIdx) => {
+              const rowOffset = rowIdx % 2 === 1 ? HEX_W / 2 : 0;
+              const cy = PAD + SIZE + rowIdx * ROW_STEP;
+              return habit.days.map((d, i) => {
+                const cx = PAD + HEX_W / 2 + rowOffset + i * HEX_W;
+                const isToday = i === todayIdx;
+                return (
+                  <g
+                    key={`${habit.id}-${i}`}
+                    onClick={() => toggle(habit.id, i)}
+                    className="cursor-pointer"
+                  >
+                    <motion.path
+                      d={hexPath(cx, cy, SIZE - 1.5)}
+                      fill={d ? "var(--color-background)" : "rgba(255,255,255,0.08)"}
+                      stroke="var(--color-foreground)"
+                      strokeWidth={2}
+                      whileHover={{ opacity: 0.85 }}
+                      whileTap={{ scale: 0.92, originX: cx / svgW, originY: cy / svgH }}
+                      style={{ transformBox: "fill-box", transformOrigin: `${cx}px ${cy}px` }}
+                    />
+                    {isToday && !d && (
+                      <path
+                        d={hexPath(cx, cy, SIZE - 5)}
+                        fill="none"
+                        stroke="var(--color-background)"
+                        strokeWidth={1}
+                        opacity={0.7}
+                      />
+                    )}
+                    {d && (
+                      <g
+                        stroke="var(--color-foreground)"
+                        strokeWidth={2.5}
+                        strokeLinecap="square"
+                      >
+                        <line x1={cx - 6} y1={cy - 6} x2={cx + 6} y2={cy + 6} />
+                        <line x1={cx + 6} y1={cy - 6} x2={cx - 6} y2={cy + 6} />
+                      </g>
+                    )}
+                  </g>
+                );
+              });
+            })}
+          </svg>
+        </div>
       </div>
 
       {/* Footer */}
