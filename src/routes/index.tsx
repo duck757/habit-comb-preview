@@ -22,6 +22,8 @@ function Index() {
   const [revealed, setRevealed] = useState<boolean[]>([false, false, false, false, false]);
   const toggleNote = (i: number) =>
     setRevealed((r) => r.map((v, idx) => (idx === i ? !v : v)));
+
+  return (
     <main className="bg-background text-foreground overflow-hidden">
       {/* Nav */}
       <nav className="sticky top-0 z-40 bg-background/80 backdrop-blur-xl">
