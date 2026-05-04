@@ -73,7 +73,7 @@ function Index() {
             >
               Meet HabitComb
               <br />
-              <span className="text-muted-foreground">Build sweet habits,</span>
+              <span className="text-accent">Build sweet habits,</span>
               <br />
               one cell at a time
             </motion.h1>
