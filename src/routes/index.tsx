@@ -283,8 +283,6 @@ function Index() {
                   duration: 3,
                   times: [0, 0.15, 0.55, 0.7],
                   delay: i * 0.7,
-                  repeat: Infinity,
-                  repeatDelay: 4,
                 }}
                 className="absolute w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center text-[10px] sm:text-xs font-bold text-foreground/70 px-2 text-center"
                 style={{
@@ -319,8 +317,6 @@ function Index() {
                   times: [0, 0.1, 0.2, 0.6, 0.7, 0.8],
                   delay: i * 0.7 + 0.2,
                   ease: "easeInOut",
-                  repeat: Infinity,
-                  repeatDelay: 4,
                 }}
                 className="absolute z-20 text-3xl sm:text-4xl"
                 style={{ filter: "drop-shadow(0 4px 6px rgba(120,80,0,0.3))" }}
@@ -352,8 +348,6 @@ function Index() {
                   times: [0, 0.55, 0.6, 0.65, 0.75, 1],
                   delay: i * 0.7 + 0.2,
                   ease: "backOut",
-                  repeat: Infinity,
-                  repeatDelay: 4,
                 }}
                 className="w-14 h-16 sm:w-16 sm:h-[72px]"
                 style={{
@@ -369,7 +363,6 @@ function Index() {
 
         <motion.div
           animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
           className="mt-2 text-center text-2xl text-muted-foreground"
         >
           ↓
