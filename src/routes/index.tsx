@@ -244,81 +244,54 @@ function Index() {
           <p className="mt-3 text-muted-foreground">Scroll to watch them snap into place ↓</p>
         </div>
 
-        <div className="relative h-72 sm:h-80 max-w-4xl mx-auto">
-          {/* FAN / FUNNEL shape in the center pulling notes in */}
+        <div className="relative h-80 sm:h-96 max-w-5xl mx-auto">
+          {/* Dotted flight path */}
           <svg
-            viewBox="0 0 800 320"
-            className="absolute inset-0 w-full h-full overflow-visible"
+            viewBox="0 0 800 360"
+            className="absolute inset-0 w-full h-full"
             preserveAspectRatio="none"
           >
-            <defs>
-              <linearGradient id="funnelGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#fde68a" stopOpacity="0.15" />
-                <stop offset="60%" stopColor="#fbbf24" stopOpacity="0.55" />
-                <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.9" />
-              </linearGradient>
-            </defs>
-            {/* Funnel body — wide on the left (notes), narrow on the right (cells) */}
             <motion.path
-              d="M 60 20 L 520 130 L 520 190 L 60 300 Z"
-              fill="url(#funnelGrad)"
+              d="M 80 80 Q 200 20, 320 140 T 560 200 Q 660 240, 720 180"
+              fill="none"
               stroke="#fbbf24"
-              strokeWidth="1.5"
-              initial={{ opacity: 0, scaleX: 0.6 }}
-              whileInView={{ opacity: 1, scaleX: 1 }}
+              strokeWidth="2"
+              strokeDasharray="4 8"
+              strokeLinecap="round"
+              initial={{ pathLength: 0, opacity: 0 }}
+              whileInView={{ pathLength: 1, opacity: 0.5 }}
               viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              style={{ transformOrigin: "100% 50%" }}
+              transition={{ duration: 1.4, ease: "easeOut" }}
             />
-            {/* Suction swirl lines */}
-            {[0, 1, 2, 3].map((i) => (
-              <motion.line
-                key={i}
-                x1="80"
-                y1={60 + i * 60}
-                x2="510"
-                y2={150 + (i - 1.5) * 8}
-                stroke="#f59e0b"
-                strokeWidth="1"
-                strokeDasharray="3 6"
-                initial={{ pathLength: 0, opacity: 0 }}
-                whileInView={{ pathLength: 1, opacity: 0.6 }}
-                viewport={{ once: true, amount: 0.4 }}
-                transition={{ duration: 1, delay: 0.3 + i * 0.1 }}
-              />
-            ))}
           </svg>
 
-          {/* Sticky notes getting sucked into the fan */}
+          {/* Source sticky notes (left side) */}
           {[0, 1, 2, 3].map((i) => {
             const colors = ["#fde68a", "#fcd34d", "#fbbf24", "#fef08a"];
-            const startTops = ["6%", "30%", "58%", "78%"];
-            const startRot = [-10, 6, -4, 8];
+            const tops = ["8%", "32%", "56%", "78%"];
+            const rots = [-8, 5, -4, 7];
             return (
               <motion.div
                 key={`note-${i}`}
-                initial={{ x: 0, y: 0, rotate: startRot[i], opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0, rotate: rots[i] }}
                 whileInView={{
-                  x: ["0%", "0%", "260%"],
-                  y: ["0%", "0%", `${(1 - i / 1.5) * 30}%`],
-                  rotate: [startRot[i], startRot[i], 540],
-                  scale: [1, 1, 0.15],
-                  opacity: [1, 1, 0],
+                  opacity: [0, 1, 1, 0],
+                  scale: [0, 1, 1, 0.4],
                 }}
                 viewport={{ once: true, amount: 0.4 }}
                 transition={{
-                  duration: 2.2,
-                  times: [0, 0.25, 1],
-                  delay: 0.3 + i * 0.25,
-                  ease: [0.5, 0, 0.75, 0],
+                  duration: 3,
+                  times: [0, 0.15, 0.55, 0.7],
+                  delay: i * 0.7,
                   repeat: Infinity,
-                  repeatDelay: 1.5,
+                  repeatDelay: 4,
                 }}
                 className="absolute w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center text-[10px] sm:text-xs font-bold text-foreground/70 px-2 text-center"
                 style={{
-                  top: startTops[i],
-                  left: "2%",
+                  top: tops[i],
+                  left: "3%",
                   background: colors[i],
+                  transform: `rotate(${rots[i]}deg)`,
                   boxShadow: "0 8px 16px -6px rgba(120,80,0,0.25)",
                 }}
               >
@@ -327,32 +300,67 @@ function Index() {
             );
           })}
 
-          {/* Hex cells popping out the narrow end of the fan */}
-          <div className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 flex flex-col gap-2">
-            {[0, 1, 2, 3].map((i) => (
+          {/* The bee — flies between notes and hex grid */}
+          {[0, 1, 2, 3].map((i) => {
+            const tops = ["8%", "32%", "56%", "78%"];
+            const hexTops = ["18%", "38%", "58%", "78%"];
+            return (
               <motion.div
-                key={`hex-${i}`}
-                initial={{ scale: 0, opacity: 0, x: -40 }}
+                key={`bee-${i}`}
+                initial={{ opacity: 0, top: tops[i], left: "8%" }}
                 whileInView={{
-                  scale: [0, 0, 1.25, 1],
-                  opacity: [0, 0, 1, 1],
-                  x: [-40, -40, 0, 0],
+                  opacity: [0, 1, 1, 1, 1, 0],
+                  top: [tops[i], tops[i], tops[i], hexTops[i], hexTops[i], hexTops[i]],
+                  left: ["8%", "8%", "10%", "82%", "82%", "82%"],
                 }}
                 viewport={{ once: true, amount: 0.4 }}
                 transition={{
-                  duration: 2.2,
-                  times: [0, 0.55, 0.8, 1],
-                  delay: 0.3 + i * 0.25,
+                  duration: 3,
+                  times: [0, 0.1, 0.2, 0.6, 0.7, 0.8],
+                  delay: i * 0.7 + 0.2,
+                  ease: "easeInOut",
+                  repeat: Infinity,
+                  repeatDelay: 4,
+                }}
+                className="absolute z-20 text-3xl sm:text-4xl"
+                style={{ filter: "drop-shadow(0 4px 6px rgba(120,80,0,0.3))" }}
+              >
+                <motion.span
+                  animate={{ rotate: [-8, 8, -8] }}
+                  transition={{ duration: 0.3, repeat: Infinity }}
+                  className="inline-block"
+                >
+                  🐝
+                </motion.span>
+              </motion.div>
+            );
+          })}
+
+          {/* Hex cells dropping into the comb (right side) */}
+          <div className="absolute right-4 sm:right-8 top-0 bottom-0 flex flex-col justify-around py-4">
+            {[0, 1, 2, 3].map((i) => (
+              <motion.div
+                key={`hex-${i}`}
+                initial={{ scale: 0, opacity: 0 }}
+                whileInView={{
+                  scale: [0, 0, 0, 1.3, 1, 1],
+                  opacity: [0, 0, 0, 1, 1, 1],
+                }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{
+                  duration: 3,
+                  times: [0, 0.55, 0.6, 0.65, 0.75, 1],
+                  delay: i * 0.7 + 0.2,
                   ease: "backOut",
                   repeat: Infinity,
-                  repeatDelay: 1.5,
+                  repeatDelay: 4,
                 }}
-                className="w-12 h-14 sm:w-14 sm:h-16"
+                className="w-14 h-16 sm:w-16 sm:h-[72px]"
                 style={{
                   background: ["#fde68a", "#fcd34d", "#fbbf24", "#fef08a"][i],
                   clipPath:
                     "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
-                  boxShadow: "0 6px 14px -6px rgba(120,80,0,0.35)",
+                  boxShadow: "0 6px 14px -6px rgba(120,80,0,0.4)",
                 }}
               />
             ))}
