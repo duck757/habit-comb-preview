@@ -244,48 +244,80 @@ function Index() {
           <p className="mt-3 text-muted-foreground">Scroll to watch them snap into place ↓</p>
         </div>
 
-        <div className="relative h-64 sm:h-72 max-w-3xl mx-auto">
-          <svg viewBox="0 0 600 260" className="absolute inset-0 w-full h-full overflow-visible">
-            {/* dashed flow path */}
+        <div className="relative h-72 sm:h-80 max-w-4xl mx-auto">
+          {/* FAN / FUNNEL shape in the center pulling notes in */}
+          <svg
+            viewBox="0 0 800 320"
+            className="absolute inset-0 w-full h-full overflow-visible"
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <linearGradient id="funnelGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#fde68a" stopOpacity="0.15" />
+                <stop offset="60%" stopColor="#fbbf24" stopOpacity="0.55" />
+                <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.9" />
+              </linearGradient>
+            </defs>
+            {/* Funnel body — wide on the left (notes), narrow on the right (cells) */}
             <motion.path
-              d="M 90 50 C 200 50, 200 210, 300 210 S 400 50, 510 50"
-              fill="none"
-              stroke="hsl(var(--accent, 45 95% 55%))"
-              strokeWidth="2"
-              strokeDasharray="6 8"
-              initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
+              d="M 60 20 L 520 130 L 520 190 L 60 300 Z"
+              fill="url(#funnelGrad)"
+              stroke="#fbbf24"
+              strokeWidth="1.5"
+              initial={{ opacity: 0, scaleX: 0.6 }}
+              whileInView={{ opacity: 1, scaleX: 1 }}
               viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 1.4, ease: "easeInOut" }}
-              style={{ stroke: "#fbbf24" }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              style={{ transformOrigin: "100% 50%" }}
             />
+            {/* Suction swirl lines */}
+            {[0, 1, 2, 3].map((i) => (
+              <motion.line
+                key={i}
+                x1="80"
+                y1={60 + i * 60}
+                x2="510"
+                y2={150 + (i - 1.5) * 8}
+                stroke="#f59e0b"
+                strokeWidth="1"
+                strokeDasharray="3 6"
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ pathLength: 1, opacity: 0.6 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 1, delay: 0.3 + i * 0.1 }}
+              />
+            ))}
           </svg>
 
-          {/* Sticky notes (left) morphing into hex cells (right) */}
-          {[0, 1, 2].map((i) => {
-            const colors = ["#fde68a", "#fcd34d", "#fbbf24"];
-            const tops = ["8%", "38%", "68%"];
+          {/* Sticky notes getting sucked into the fan */}
+          {[0, 1, 2, 3].map((i) => {
+            const colors = ["#fde68a", "#fcd34d", "#fbbf24", "#fef08a"];
+            const startTops = ["6%", "30%", "58%", "78%"];
+            const startRot = [-10, 6, -4, 8];
             return (
               <motion.div
                 key={`note-${i}`}
-                initial={{ x: 0, rotate: -6 + i * 4, opacity: 1, scale: 1 }}
+                initial={{ x: 0, y: 0, rotate: startRot[i], opacity: 1, scale: 1 }}
                 whileInView={{
-                  x: ["0%", "0%", "320%"],
-                  rotate: [-6 + i * 4, -6 + i * 4, 0],
-                  scale: [1, 1, 0.45],
+                  x: ["0%", "0%", "260%"],
+                  y: ["0%", "0%", `${(1 - i / 1.5) * 30}%`],
+                  rotate: [startRot[i], startRot[i], 540],
+                  scale: [1, 1, 0.15],
                   opacity: [1, 1, 0],
                 }}
-                viewport={{ once: true, amount: 0.5 }}
+                viewport={{ once: true, amount: 0.4 }}
                 transition={{
-                  duration: 2,
-                  times: [0, 0.3, 1],
-                  delay: 0.2 + i * 0.25,
-                  ease: "easeInOut",
+                  duration: 2.2,
+                  times: [0, 0.25, 1],
+                  delay: 0.3 + i * 0.25,
+                  ease: [0.5, 0, 0.75, 0],
+                  repeat: Infinity,
+                  repeatDelay: 1.5,
                 }}
-                className="absolute w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center text-xs font-bold text-foreground/70"
+                className="absolute w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center text-[10px] sm:text-xs font-bold text-foreground/70 px-2 text-center"
                 style={{
-                  top: tops[i],
-                  left: "4%",
+                  top: startTops[i],
+                  left: "2%",
                   background: colors[i],
                   boxShadow: "0 8px 16px -6px rgba(120,80,0,0.25)",
                 }}
@@ -295,26 +327,29 @@ function Index() {
             );
           })}
 
-          {/* Receiving hex cells (right) */}
+          {/* Hex cells popping out the narrow end of the fan */}
           <div className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 flex flex-col gap-2">
-            {[0, 1, 2].map((i) => (
+            {[0, 1, 2, 3].map((i) => (
               <motion.div
                 key={`hex-${i}`}
-                initial={{ scale: 0.6, opacity: 0.25 }}
+                initial={{ scale: 0, opacity: 0, x: -40 }}
                 whileInView={{
-                  scale: [0.6, 0.6, 1.15, 1],
-                  opacity: [0.25, 0.25, 1, 1],
+                  scale: [0, 0, 1.25, 1],
+                  opacity: [0, 0, 1, 1],
+                  x: [-40, -40, 0, 0],
                 }}
-                viewport={{ once: true, amount: 0.5 }}
+                viewport={{ once: true, amount: 0.4 }}
                 transition={{
-                  duration: 2,
-                  times: [0, 0.6, 0.8, 1],
-                  delay: 0.2 + i * 0.25,
-                  ease: "easeOut",
+                  duration: 2.2,
+                  times: [0, 0.55, 0.8, 1],
+                  delay: 0.3 + i * 0.25,
+                  ease: "backOut",
+                  repeat: Infinity,
+                  repeatDelay: 1.5,
                 }}
-                className="w-14 h-16 sm:w-16 sm:h-[72px]"
+                className="w-12 h-14 sm:w-14 sm:h-16"
                 style={{
-                  background: ["#fde68a", "#fcd34d", "#fbbf24"][i],
+                  background: ["#fde68a", "#fcd34d", "#fbbf24", "#fef08a"][i],
                   clipPath:
                     "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
                   boxShadow: "0 6px 14px -6px rgba(120,80,0,0.35)",
