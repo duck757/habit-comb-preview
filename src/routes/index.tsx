@@ -18,6 +18,22 @@ const goals = [
   { goal: "Sleep before 11 PM", color: "#fed7aa", rotate: -5 },
 ];
 
+function seededGrid(seed: number, count: number, density: number): boolean[] {
+  const grid: boolean[] = [];
+  let s = seed;
+  for (let i = 0; i < count; i++) {
+    s = (s * 1664525 + 1013904223) & 0xffffffff;
+    grid.push((s >>> 0) / 0xffffffff < density);
+  }
+  return grid;
+}
+
+const phoneWidgets = [
+  { icon: "</>", label: "Side Hustle", color: "#fbbf24", density: 0.6, grid: seededGrid(42, 60, 0.6) },
+  { icon: "🏃", label: "Running", color: "#34d399", density: 0.7, grid: seededGrid(77, 60, 0.7) },
+  { icon: "☕", label: "Limit Coffee", color: "#f472b6", density: 0.5, grid: seededGrid(13, 60, 0.5) },
+];
+
 function Index() {
   const [revealed, setRevealed] = useState<boolean[]>([false, false, false, false, false]);
   const toggleNote = (i: number) =>
@@ -174,10 +190,8 @@ function Index() {
       <section className="border-y border-border bg-gradient-to-br from-fuchsia-600 via-rose-500 to-indigo-600">
         <div className="max-w-6xl mx-auto px-6 py-20 grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
-            { icon: "🧘", label: "Meditation", color: "#e879f9", density: 0.55, custom: "habitcomb" as const },
-            { icon: "</>", label: "Side Hustle", color: "#fbbf24", density: 0.6 },
-            { icon: "🏃", label: "Running", color: "#34d399", density: 0.7 },
-            { icon: "☕", label: "Limit Coffee", color: "#f472b6", density: 0.5 },
+            { icon: "🧘", label: "Meditation", color: "#e879f9", custom: "habitcomb" as const, grid: [] as boolean[] },
+            ...phoneWidgets,
           ].map((w, idx) => (
             <div
               key={idx}
@@ -210,9 +224,7 @@ function Index() {
                       <span className="text-white text-[11px] font-semibold">{w.label}</span>
                     </div>
                     <div className="grid grid-cols-12 gap-[3px]">
-                      {Array.from({ length: 60 }).map((_, i) => {
-                        const on = Math.random() < w.density;
-                        return (
+                      {w.grid.map((on, i) => (
                           <div
                             key={i}
                             className="aspect-square rounded-[2px]"
@@ -220,8 +232,7 @@ function Index() {
                               background: on ? w.color : "rgba(255,255,255,0.06)",
                             }}
                           />
-                        );
-                      })}
+                      ))}
                     </div>
                     <div className="mt-2 text-center text-white/60 text-[8px] font-semibold">
                       HabitComb
