@@ -170,19 +170,22 @@ function Index() {
         </div>
       </section>
 
-      {/* TRUSTED BY */}
+      {/* iPhone showcase */}
       <section className="border-y border-border bg-secondary/40">
-        <div className="max-w-6xl mx-auto px-6 py-10 flex flex-wrap items-center justify-center gap-x-12 gap-y-4 text-sm font-semibold text-muted-foreground">
-          <span className="text-foreground">As seen in</span>
-          <span>Product Hunt</span>
-          <span>·</span>
-          <span>The Verge</span>
-          <span>·</span>
-          <span>Lifehacker</span>
-          <span>·</span>
-          <span>Wired</span>
-          <span>·</span>
-          <span>Fast Company</span>
+        <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+          {[0, 1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="relative mx-auto w-full max-w-[200px] aspect-[9/19] rounded-[2.2rem] bg-foreground p-[6px] shadow-[0_20px_50px_-15px_rgba(0,0,0,0.4)]"
+            >
+              {/* Notch */}
+              <div className="absolute top-2 left-1/2 -translate-x-1/2 w-20 h-5 bg-foreground rounded-full z-10" />
+              {/* Screen */}
+              <div className="w-full h-full rounded-[1.9rem] bg-secondary overflow-hidden flex items-center justify-center text-xs font-semibold text-muted-foreground">
+                Screen {i + 1}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
