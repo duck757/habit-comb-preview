@@ -502,3 +502,103 @@ function Index() {
     </main>
   );
 }
+
+function HabitCombPhoneScreen() {
+  const habits = [
+    { name: "WORKOUTS", icon: "🏋️", color: "#a78bfa" },
+    { name: "CODING", icon: "💻", color: "#f87171" },
+  ];
+  const SIZE = 6;
+  const HEX_W = Math.sqrt(3) * SIZE;
+  const HEX_H = 2 * SIZE;
+  const ROW_STEP = 1.5 * SIZE;
+  const COLS = 10;
+  const ROWS = 3;
+  const svgW = HEX_W * COLS + HEX_W / 2 + 2;
+  const svgH = ROW_STEP * (ROWS - 1) + HEX_H + 2;
+
+  const hexPath = (cx: number, cy: number, s: number) => {
+    const pts: string[] = [];
+    for (let i = 0; i < 6; i++) {
+      const a = (Math.PI / 180) * (60 * i - 90);
+      pts.push(`${(cx + s * Math.cos(a)).toFixed(2)},${(cy + s * Math.sin(a)).toFixed(2)}`);
+    }
+    return `M${pts.join(" L")} Z`;
+  };
+
+  return (
+    <div className="absolute inset-0 pt-8 px-3 flex flex-col gap-3 bg-black">
+      {/* App header */}
+      <div className="flex items-center justify-between px-1">
+        <div className="flex items-center gap-1.5 text-white">
+          <span className="text-[10px]">⚙️</span>
+          <span className="font-extrabold text-[13px] tracking-tight">Habit</span>
+          <div className="flex gap-[2px]">
+            {["C", "O", "M", "B"].map((l) => (
+              <span
+                key={l}
+                className="w-3.5 h-3.5 rounded-full border border-violet-400 text-violet-400 text-[7px] font-bold flex items-center justify-center"
+              >
+                {l}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="flex items-center gap-1.5 text-white/80">
+          <span className="text-[9px]">⬢</span>
+          <div className="w-4 h-4 rounded border border-white/40 flex items-center justify-center text-[9px]">+</div>
+        </div>
+      </div>
+
+      {/* Habit cards */}
+      <div className="flex flex-col gap-2.5">
+        {habits.map((h) => (
+          <div
+            key={h.name}
+            className="rounded-xl border border-white/10 bg-white/[0.03] p-2.5"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <div
+                className="w-7 h-7 rounded-md flex items-center justify-center text-[12px]"
+                style={{ background: `${h.color}22` }}
+              >
+                {h.icon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-white font-extrabold text-[10px] tracking-wide">
+                  {h.name}
+                </div>
+                <div className="text-white/50 text-[7px] font-semibold tracking-wider">
+                  0/30 DAYS COMPLETED
+                </div>
+              </div>
+              <div
+                className="px-1.5 py-0.5 rounded-full border text-[6px] font-bold tracking-wider"
+                style={{ borderColor: h.color, color: h.color }}
+              >
+                LOG ACTIVITY
+              </div>
+            </div>
+            <svg viewBox={`0 0 ${svgW} ${svgH}`} className="w-full h-auto block">
+              {Array.from({ length: ROWS }).map((_, rowIdx) => {
+                const rowOffset = rowIdx % 2 === 1 ? HEX_W / 2 : 0;
+                const cy = 1 + SIZE + rowIdx * ROW_STEP;
+                return Array.from({ length: COLS }).map((_, i) => {
+                  const cx = 1 + HEX_W / 2 + rowOffset + i * HEX_W;
+                  return (
+                    <path
+                      key={`${rowIdx}-${i}`}
+                      d={hexPath(cx, cy, SIZE - 0.5)}
+                      fill={h.color}
+                      opacity={0.18}
+                    />
+                  );
+                });
+              })}
+            </svg>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
