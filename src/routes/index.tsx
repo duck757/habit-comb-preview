@@ -174,7 +174,7 @@ function Index() {
       <section className="border-y border-border bg-gradient-to-br from-fuchsia-600 via-rose-500 to-indigo-600">
         <div className="max-w-6xl mx-auto px-6 py-20 grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
-            { icon: "🧘", label: "Meditation", color: "#e879f9", density: 0.55 },
+            { icon: "🧘", label: "Meditation", color: "#e879f9", density: 0.55, custom: "habitcomb" as const },
             { icon: "</>", label: "Side Hustle", color: "#fbbf24", density: 0.6 },
             { icon: "🏃", label: "Running", color: "#34d399", density: 0.7 },
             { icon: "☕", label: "Limit Coffee", color: "#f472b6", density: 0.5 },
@@ -183,44 +183,51 @@ function Index() {
               key={idx}
               className="relative mx-auto w-full max-w-[220px] aspect-[9/19] rounded-[2.4rem] bg-black p-[5px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.55)] ring-1 ring-white/10"
             >
-              {/* Dynamic Island */}
               <div className="absolute top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-20" />
-              {/* Screen */}
-              <div className="relative w-full h-full rounded-[2.05rem] overflow-hidden bg-gradient-to-br from-rose-700 via-fuchsia-700 to-indigo-800">
-                {/* Status bar */}
-                <div className="flex items-center justify-between px-5 pt-3 text-white text-[10px] font-semibold">
+              <div
+                className={`relative w-full h-full rounded-[2.05rem] overflow-hidden ${
+                  "custom" in w && w.custom === "habitcomb"
+                    ? "bg-black"
+                    : "bg-gradient-to-br from-rose-700 via-fuchsia-700 to-indigo-800"
+                }`}
+              >
+                <div className="flex items-center justify-between px-5 pt-3 text-white text-[10px] font-semibold relative z-10">
                   <span>9:41</span>
                   <span>•••</span>
                 </div>
-                {/* Widget */}
-                <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 bg-black/70 backdrop-blur rounded-2xl p-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div
-                      className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-bold"
-                      style={{ background: `${w.color}33`, color: w.color }}
-                    >
-                      {w.icon}
+
+                {"custom" in w && w.custom === "habitcomb" ? (
+                  <HabitCombPhoneScreen />
+                ) : (
+                  <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 bg-black/70 backdrop-blur rounded-2xl p-3">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div
+                        className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-bold"
+                        style={{ background: `${w.color}33`, color: w.color }}
+                      >
+                        {w.icon}
+                      </div>
+                      <span className="text-white text-[11px] font-semibold">{w.label}</span>
                     </div>
-                    <span className="text-white text-[11px] font-semibold">{w.label}</span>
+                    <div className="grid grid-cols-12 gap-[3px]">
+                      {Array.from({ length: 60 }).map((_, i) => {
+                        const on = Math.random() < w.density;
+                        return (
+                          <div
+                            key={i}
+                            className="aspect-square rounded-[2px]"
+                            style={{
+                              background: on ? w.color : "rgba(255,255,255,0.06)",
+                            }}
+                          />
+                        );
+                      })}
+                    </div>
+                    <div className="mt-2 text-center text-white/60 text-[8px] font-semibold">
+                      HabitComb
+                    </div>
                   </div>
-                  <div className="grid grid-cols-12 gap-[3px]">
-                    {Array.from({ length: 60 }).map((_, i) => {
-                      const on = Math.random() < w.density;
-                      return (
-                        <div
-                          key={i}
-                          className="aspect-square rounded-[2px]"
-                          style={{
-                            background: on ? w.color : "rgba(255,255,255,0.06)",
-                          }}
-                        />
-                      );
-                    })}
-                  </div>
-                  <div className="mt-2 text-center text-white/60 text-[8px] font-semibold">
-                    HabitComb
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           ))}
