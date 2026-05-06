@@ -174,7 +174,7 @@ function Index() {
       <section className="border-y border-border bg-gradient-to-br from-fuchsia-600 via-rose-500 to-indigo-600">
         <div className="max-w-6xl mx-auto px-6 py-20 grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
-            { icon: "🧘", label: "Meditation", color: "#e879f9", density: 0.55 },
+            { icon: "🧘", label: "Meditation", color: "#e879f9", density: 0.55, custom: "habitcomb" as const },
             { icon: "</>", label: "Side Hustle", color: "#fbbf24", density: 0.6 },
             { icon: "🏃", label: "Running", color: "#34d399", density: 0.7 },
             { icon: "☕", label: "Limit Coffee", color: "#f472b6", density: 0.5 },
@@ -183,44 +183,51 @@ function Index() {
               key={idx}
               className="relative mx-auto w-full max-w-[220px] aspect-[9/19] rounded-[2.4rem] bg-black p-[5px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.55)] ring-1 ring-white/10"
             >
-              {/* Dynamic Island */}
               <div className="absolute top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-20" />
-              {/* Screen */}
-              <div className="relative w-full h-full rounded-[2.05rem] overflow-hidden bg-gradient-to-br from-rose-700 via-fuchsia-700 to-indigo-800">
-                {/* Status bar */}
-                <div className="flex items-center justify-between px-5 pt-3 text-white text-[10px] font-semibold">
+              <div
+                className={`relative w-full h-full rounded-[2.05rem] overflow-hidden ${
+                  "custom" in w && w.custom === "habitcomb"
+                    ? "bg-black"
+                    : "bg-gradient-to-br from-rose-700 via-fuchsia-700 to-indigo-800"
+                }`}
+              >
+                <div className="flex items-center justify-between px-5 pt-3 text-white text-[10px] font-semibold relative z-10">
                   <span>9:41</span>
                   <span>•••</span>
                 </div>
-                {/* Widget */}
-                <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 bg-black/70 backdrop-blur rounded-2xl p-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div
-                      className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-bold"
-                      style={{ background: `${w.color}33`, color: w.color }}
-                    >
-                      {w.icon}
+
+                {"custom" in w && w.custom === "habitcomb" ? (
+                  <HabitCombPhoneScreen />
+                ) : (
+                  <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 bg-black/70 backdrop-blur rounded-2xl p-3">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div
+                        className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-bold"
+                        style={{ background: `${w.color}33`, color: w.color }}
+                      >
+                        {w.icon}
+                      </div>
+                      <span className="text-white text-[11px] font-semibold">{w.label}</span>
                     </div>
-                    <span className="text-white text-[11px] font-semibold">{w.label}</span>
+                    <div className="grid grid-cols-12 gap-[3px]">
+                      {Array.from({ length: 60 }).map((_, i) => {
+                        const on = Math.random() < w.density;
+                        return (
+                          <div
+                            key={i}
+                            className="aspect-square rounded-[2px]"
+                            style={{
+                              background: on ? w.color : "rgba(255,255,255,0.06)",
+                            }}
+                          />
+                        );
+                      })}
+                    </div>
+                    <div className="mt-2 text-center text-white/60 text-[8px] font-semibold">
+                      HabitComb
+                    </div>
                   </div>
-                  <div className="grid grid-cols-12 gap-[3px]">
-                    {Array.from({ length: 60 }).map((_, i) => {
-                      const on = Math.random() < w.density;
-                      return (
-                        <div
-                          key={i}
-                          className="aspect-square rounded-[2px]"
-                          style={{
-                            background: on ? w.color : "rgba(255,255,255,0.06)",
-                          }}
-                        />
-                      );
-                    })}
-                  </div>
-                  <div className="mt-2 text-center text-white/60 text-[8px] font-semibold">
-                    HabitComb
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           ))}
@@ -493,5 +500,105 @@ function Index() {
         </div>
       </footer>
     </main>
+  );
+}
+
+function HabitCombPhoneScreen() {
+  const habits = [
+    { name: "WORKOUTS", icon: "🏋️", color: "#a78bfa" },
+    { name: "CODING", icon: "💻", color: "#f87171" },
+  ];
+  const SIZE = 6;
+  const HEX_W = Math.sqrt(3) * SIZE;
+  const HEX_H = 2 * SIZE;
+  const ROW_STEP = 1.5 * SIZE;
+  const COLS = 10;
+  const ROWS = 3;
+  const svgW = HEX_W * COLS + HEX_W / 2 + 2;
+  const svgH = ROW_STEP * (ROWS - 1) + HEX_H + 2;
+
+  const hexPath = (cx: number, cy: number, s: number) => {
+    const pts: string[] = [];
+    for (let i = 0; i < 6; i++) {
+      const a = (Math.PI / 180) * (60 * i - 90);
+      pts.push(`${(cx + s * Math.cos(a)).toFixed(2)},${(cy + s * Math.sin(a)).toFixed(2)}`);
+    }
+    return `M${pts.join(" L")} Z`;
+  };
+
+  return (
+    <div className="absolute inset-0 pt-8 px-3 flex flex-col gap-3 bg-black">
+      {/* App header */}
+      <div className="flex items-center justify-between px-1">
+        <div className="flex items-center gap-1.5 text-white">
+          <span className="text-[10px]">⚙️</span>
+          <span className="font-extrabold text-[13px] tracking-tight">Habit</span>
+          <div className="flex gap-[2px]">
+            {["C", "O", "M", "B"].map((l) => (
+              <span
+                key={l}
+                className="w-3.5 h-3.5 rounded-full border border-violet-400 text-violet-400 text-[7px] font-bold flex items-center justify-center"
+              >
+                {l}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="flex items-center gap-1.5 text-white/80">
+          <span className="text-[9px]">⬢</span>
+          <div className="w-4 h-4 rounded border border-white/40 flex items-center justify-center text-[9px]">+</div>
+        </div>
+      </div>
+
+      {/* Habit cards */}
+      <div className="flex flex-col gap-2.5">
+        {habits.map((h) => (
+          <div
+            key={h.name}
+            className="rounded-xl border border-white/10 bg-white/[0.03] p-2.5"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <div
+                className="w-7 h-7 rounded-md flex items-center justify-center text-[12px]"
+                style={{ background: `${h.color}22` }}
+              >
+                {h.icon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-white font-extrabold text-[10px] tracking-wide">
+                  {h.name}
+                </div>
+                <div className="text-white/50 text-[7px] font-semibold tracking-wider">
+                  0/30 DAYS COMPLETED
+                </div>
+              </div>
+              <div
+                className="px-1.5 py-0.5 rounded-full border text-[6px] font-bold tracking-wider"
+                style={{ borderColor: h.color, color: h.color }}
+              >
+                LOG ACTIVITY
+              </div>
+            </div>
+            <svg viewBox={`0 0 ${svgW} ${svgH}`} className="w-full h-auto block">
+              {Array.from({ length: ROWS }).map((_, rowIdx) => {
+                const rowOffset = rowIdx % 2 === 1 ? HEX_W / 2 : 0;
+                const cy = 1 + SIZE + rowIdx * ROW_STEP;
+                return Array.from({ length: COLS }).map((_, i) => {
+                  const cx = 1 + HEX_W / 2 + rowOffset + i * HEX_W;
+                  return (
+                    <path
+                      key={`${rowIdx}-${i}`}
+                      d={hexPath(cx, cy, SIZE - 0.5)}
+                      fill={h.color}
+                      opacity={0.18}
+                    />
+                  );
+                });
+              })}
+            </svg>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
