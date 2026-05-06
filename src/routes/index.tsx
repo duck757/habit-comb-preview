@@ -188,88 +188,39 @@ function Index() {
               {/* Screen */}
               <div className="relative w-full h-full rounded-[2.05rem] overflow-hidden bg-gradient-to-br from-rose-700 via-fuchsia-700 to-indigo-800">
                 {/* Status bar */}
-                <div className="flex items-center justify-between px-5 pt-3 text-white text-[10px] font-semibold relative z-10">
+                <div className="flex items-center justify-between px-5 pt-3 text-white text-[10px] font-semibold">
                   <span>9:41</span>
                   <span>•••</span>
                 </div>
-
-                {idx === 1 ? (
-                  <div className="absolute inset-0 bg-[#0a0a0a] pt-10 px-3 space-y-3">
-                    {[
-                      { label: "WORKOUTS", icon: "🏋️", color: "#8b5cf6" },
-                      { label: "CODING", icon: "💻", color: "#ef4444" },
-                    ].map((card) => (
-                      <div key={card.label} className="bg-[#1a1a1a] rounded-2xl p-2.5">
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-1.5">
-                            <div
-                              className="w-5 h-5 rounded-md flex items-center justify-center text-[8px]"
-                              style={{ background: `${card.color}33` }}
-                            >
-                              {card.icon}
-                            </div>
-                            <div>
-                              <div className="text-white text-[8px] font-bold leading-none">
-                                {card.label}
-                              </div>
-                              <div className="text-white/40 text-[6px] mt-0.5">
-                                0/30 DAYS
-                              </div>
-                            </div>
-                          </div>
-                          <div
-                            className="text-[6px] font-bold px-2 py-1 rounded-full border"
-                            style={{ color: card.color, borderColor: card.color }}
-                          >
-                            LOG
-                          </div>
-                        </div>
-                        <div className="grid grid-cols-12 gap-[2px]">
-                          {Array.from({ length: 36 }).map((_, i) => (
-                            <div
-                              key={i}
-                              className="aspect-square"
-                              style={{
-                                background: `${card.color}22`,
-                                clipPath:
-                                  "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    ))}
+                {/* Widget */}
+                <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 bg-black/70 backdrop-blur rounded-2xl p-3">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div
+                      className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-bold"
+                      style={{ background: `${w.color}33`, color: w.color }}
+                    >
+                      {w.icon}
+                    </div>
+                    <span className="text-white text-[11px] font-semibold">{w.label}</span>
                   </div>
-                ) : (
-                  <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 bg-black/70 backdrop-blur rounded-2xl p-3">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div
-                        className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-bold"
-                        style={{ background: `${w.color}33`, color: w.color }}
-                      >
-                        {w.icon}
-                      </div>
-                      <span className="text-white text-[11px] font-semibold">{w.label}</span>
-                    </div>
-                    <div className="grid grid-cols-12 gap-[3px]">
-                      {Array.from({ length: 60 }).map((_, i) => {
-                        const on = Math.random() < w.density;
-                        return (
-                          <div
-                            key={i}
-                            className="aspect-square rounded-[2px]"
-                            style={{
-                              background: on ? w.color : "rgba(255,255,255,0.06)",
-                            }}
-                          />
-                        );
-                      })}
-                    </div>
-                    <div className="mt-2 text-center text-white/60 text-[8px] font-semibold">
-                      HabitComb
-                    </div>
+                  <div className="grid grid-cols-12 gap-[3px]">
+                    {Array.from({ length: 60 }).map((_, i) => {
+                      const on = Math.random() < w.density;
+                      return (
+                        <div
+                          key={i}
+                          className="aspect-square rounded-[2px]"
+                          style={{
+                            background: on ? w.color : "rgba(255,255,255,0.06)",
+                          }}
+                        />
+                      );
+                    })}
                   </div>
-                )}
+                  <div className="mt-2 text-center text-white/60 text-[8px] font-semibold">
+                    HabitComb
+                  </div>
+                </div>
               </div>
             </div>
           ))}
