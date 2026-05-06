@@ -7,7 +7,9 @@ export function StoreButtons({ invert = false }: { invert?: boolean }) {
     <div className="flex flex-col sm:flex-row gap-3">
       {/* Google Play — available now */}
       <a
-        href="#"
+        href="https://play.google.com/store/apps/details?id=com.plensync.habitcomb&pcampaignid=web_share"
+        target="_blank"
+        rel="noopener noreferrer"
         className={`group inline-flex items-center gap-3 ${base} rounded-2xl px-5 py-3 hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-comb`}
       >
         <svg viewBox="0 0 512 512" className="w-7 h-7" aria-hidden>
