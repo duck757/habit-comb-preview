@@ -30,7 +30,7 @@ function seededGrid(seed: number, count: number, density: number): boolean[] {
 
 const phoneWidgets = [
   { icon: "</>", label: "Side Hustle", color: "#fbbf24", density: 0.6, grid: seededGrid(42, 60, 0.6) },
-  { icon: "🏃", label: "Running", color: "#34d399", density: 0.7, grid: seededGrid(77, 60, 0.7) },
+  { icon: "🏃", label: "Running", color: "#34d399", custom: "multi" as const, grid: [] as boolean[] },
 ];
 
 function Index() {
@@ -199,9 +199,7 @@ function Index() {
               <div className="absolute top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-20" />
               <div
                 className={`relative w-full h-full rounded-[2.05rem] overflow-hidden ${
-                  "custom" in w && w.custom === "habitcomb"
-                    ? "bg-black"
-                    : "bg-gradient-to-br from-rose-700 via-fuchsia-700 to-indigo-800"
+                  "custom" in w ? "bg-black" : "bg-gradient-to-br from-rose-700 via-fuchsia-700 to-indigo-800"
                 }`}
               >
                 <div className="flex items-center justify-between px-5 pt-3 text-white text-[10px] font-semibold relative z-10">
@@ -211,6 +209,8 @@ function Index() {
 
                 {"custom" in w && w.custom === "habitcomb" ? (
                   <HabitCombPhoneScreen />
+                ) : "custom" in w && w.custom === "multi" ? (
+                  <MultiHabitPhoneScreen />
                 ) : (
                   <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 bg-black/70 backdrop-blur rounded-2xl p-3">
                     <div className="flex items-center gap-2 mb-2">
@@ -603,6 +603,85 @@ function HabitCombPhoneScreen() {
                       d={hexPath(cx, cy, SIZE - 0.5)}
                       fill={h.color}
                       opacity={isTicked ? 1 : 0.18}
+                    />
+                  );
+                });
+              })}
+            </svg>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MultiHabitPhoneScreen() {
+  const habits = [
+    { name: "Running", icon: "🏃", color: "#34d399", ticked: new Set([0,1,2,4,5,6,8,9,10,11,13,14,15,17,18,19,20,22,23,24,26,27,28]) },
+    { name: "Meditation", icon: "🧘", color: "#c084fc", ticked: new Set([0,1,3,4,6,7,8,10,11,13,14,15,16,18,20,21,22,24,25,27]) },
+    { name: "Hydrate", icon: "💧", color: "#38bdf8", ticked: new Set([0,1,2,3,5,6,7,8,9,11,12,13,14,16,17,18,19,21,22,23,25,26,27,28]) },
+    { name: "Sleep 8h", icon: "🌙", color: "#fb923c", ticked: new Set([0,2,3,4,6,7,9,10,11,13,14,15,17,18,20,21,22,24,25,27]) },
+  ];
+  const SIZE = 5;
+  const HEX_W = Math.sqrt(3) * SIZE;
+  const HEX_H = 2 * SIZE;
+  const ROW_STEP = 1.5 * SIZE;
+  const COLS = 10;
+  const ROWS = 3;
+  const svgW = HEX_W * COLS + HEX_W / 2 + 2;
+  const svgH = ROW_STEP * (ROWS - 1) + HEX_H + 2;
+
+  const hexPath = (cx: number, cy: number, s: number) => {
+    const pts: string[] = [];
+    for (let i = 0; i < 6; i++) {
+      const a = (Math.PI / 180) * (60 * i - 90);
+      pts.push(`${(cx + s * Math.cos(a)).toFixed(2)},${(cy + s * Math.sin(a)).toFixed(2)}`);
+    }
+    return `M${pts.join(" L")} Z`;
+  };
+
+  return (
+    <div className="absolute inset-0 pt-8 px-3 flex flex-col gap-2 bg-black overflow-hidden">
+      <div className="flex items-center justify-between px-1 mb-0.5">
+        <div className="flex items-center gap-1.5 text-white">
+          <span className="font-extrabold text-[12px] tracking-tight">Habit</span>
+          <div className="flex gap-[2px]">
+            {["C","O","M","B"].map((l) => (
+              <span key={l} className="w-3 h-3 rounded-full border border-violet-400 text-violet-400 text-[6px] font-bold flex items-center justify-center">
+                {l}
+              </span>
+            ))}
+          </div>
+        </div>
+        <span className="text-white/50 text-[8px] font-bold">Week 16</span>
+      </div>
+
+      <div className="flex flex-col gap-1.5 overflow-hidden">
+        {habits.map((h) => (
+          <div key={h.name} className="rounded-xl border border-white/10 bg-white/[0.04] px-2.5 py-2">
+            <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center gap-1.5">
+                <div className="w-5 h-5 rounded-md flex items-center justify-center text-[9px]" style={{ background: `${h.color}22` }}>
+                  {h.icon}
+                </div>
+                <span className="text-white font-extrabold text-[8px] tracking-wide">{h.name}</span>
+              </div>
+              <span className="text-[6px] font-bold" style={{ color: h.color }}>{h.ticked.size}/30</span>
+            </div>
+            <svg viewBox={`0 0 ${svgW} ${svgH}`} className="w-full h-auto block">
+              {Array.from({ length: ROWS }).map((_, rowIdx) => {
+                const rowOffset = rowIdx % 2 === 1 ? HEX_W / 2 : 0;
+                const cy = 1 + SIZE + rowIdx * ROW_STEP;
+                return Array.from({ length: COLS }).map((_, i) => {
+                  const idx = rowIdx * COLS + i;
+                  const isTicked = h.ticked.has(idx);
+                  const cx = 1 + HEX_W / 2 + rowOffset + i * HEX_W;
+                  return (
+                    <path
+                      key={`${rowIdx}-${i}`}
+                      d={hexPath(cx, cy, SIZE - 0.5)}
+                      fill={h.color}
+                      opacity={isTicked ? 1 : 0.15}
                     />
                   );
                 });
