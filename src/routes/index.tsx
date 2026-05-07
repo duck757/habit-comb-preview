@@ -31,7 +31,6 @@ function seededGrid(seed: number, count: number, density: number): boolean[] {
 const phoneWidgets = [
   { icon: "</>", label: "Side Hustle", color: "#fbbf24", density: 0.6, grid: seededGrid(42, 60, 0.6) },
   { icon: "🏃", label: "Running", color: "#34d399", density: 0.7, grid: seededGrid(77, 60, 0.7) },
-  { icon: "☕", label: "Limit Coffee", color: "#f472b6", density: 0.5, grid: seededGrid(13, 60, 0.5) },
 ];
 
 function Index() {
@@ -188,7 +187,7 @@ function Index() {
 
       {/* iPhone showcase */}
       <section className="border-y border-border bg-gradient-to-br from-fuchsia-600 via-rose-500 to-indigo-600">
-        <div className="max-w-6xl mx-auto px-6 py-20 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="max-w-6xl mx-auto px-6 py-20 grid grid-cols-1 sm:grid-cols-3 gap-8">
           {[
             { icon: "🧘", label: "Meditation", color: "#e879f9", custom: "habitcomb" as const, grid: [] as boolean[] },
             ...phoneWidgets,
