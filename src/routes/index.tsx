@@ -318,7 +318,7 @@ function Index() {
               strokeLinecap="round"
               initial={{ pathLength: 0, opacity: 0 }}
               whileInView={{ pathLength: 1, opacity: 0.5 }}
-              viewport={{ once: true, amount: 0.4 }}
+              viewport={{ once: false, amount: 0.4 }}
               transition={{ duration: 1.4, ease: "easeOut" }}
             />
           </svg>
@@ -336,7 +336,7 @@ function Index() {
                   opacity: [0, 1, 1, 0],
                   scale: [0, 1, 1, 0.4],
                 }}
-                viewport={{ once: true, amount: 0.4 }}
+                viewport={{ once: false, amount: 0.4 }}
                 transition={{
                   duration: 3,
                   times: [0, 0.15, 0.55, 0.7],
@@ -371,7 +371,7 @@ function Index() {
                   top: [tops[i], tops[i], tops[i], hexTops[i], hexTops[i], hexTops[i]],
                   left: ["8%", "8%", "10%", "82%", "82%", "82%"],
                 }}
-                viewport={{ once: true, amount: 0.4 }}
+                viewport={{ once: false, amount: 0.4 }}
                 transition={{
                   duration: 3,
                   times: [0, 0.1, 0.2, 0.6, 0.7, 0.8],
@@ -404,7 +404,7 @@ function Index() {
                   scale: [0, 0, 0, 1.3, 1, 1],
                   opacity: [0, 0, 0, 1, 1, 1],
                 }}
-                viewport={{ once: true, amount: 0.4 }}
+                viewport={{ once: false, amount: 0.4 }}
                 transition={{
                   duration: 3,
                   times: [0, 0.55, 0.6, 0.65, 0.75, 1],
