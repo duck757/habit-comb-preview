@@ -221,6 +221,12 @@ function Index() {
                         {w.icon}
                       </div>
                       <span className="text-white text-[11px] font-semibold">{w.label}</span>
+                      <div
+                        className="ml-auto px-1.5 py-0.5 rounded-full border text-[7px] font-bold tracking-wider"
+                        style={{ borderColor: w.color, color: w.color }}
+                      >
+                        LOG ACTIVITY
+                      </div>
                     </div>
                     {(() => {
                       const COLS = 12, ROWS = 5, S = 5;
