@@ -222,17 +222,40 @@ function Index() {
                       </div>
                       <span className="text-white text-[11px] font-semibold">{w.label}</span>
                     </div>
-                    <div className="grid grid-cols-12 gap-[3px]">
-                      {w.grid.map((on, i) => (
-                          <div
-                            key={i}
-                            className="aspect-square rounded-[2px]"
-                            style={{
-                              background: on ? w.color : "rgba(255,255,255,0.06)",
-                            }}
-                          />
-                      ))}
-                    </div>
+                    {(() => {
+                      const COLS = 12, ROWS = 5, S = 5;
+                      const HW = Math.sqrt(3) * S, HH = 2 * S, RS = 1.5 * S;
+                      const svgW = HW * COLS + HW / 2 + 2;
+                      const svgH = RS * (ROWS - 1) + HH + 2;
+                      const hp = (cx: number, cy: number) => {
+                        const pts = [];
+                        for (let k = 0; k < 6; k++) {
+                          const a = (Math.PI / 180) * (60 * k - 90);
+                          pts.push(`${(cx + (S-0.5)*Math.cos(a)).toFixed(2)},${(cy + (S-0.5)*Math.sin(a)).toFixed(2)}`);
+                        }
+                        return `M${pts.join(" L")} Z`;
+                      };
+                      return (
+                        <svg viewBox={`0 0 ${svgW} ${svgH}`} className="w-full h-auto block">
+                          {Array.from({ length: ROWS }).map((_, row) => {
+                            const off = row % 2 === 1 ? HW / 2 : 0;
+                            const cy = 1 + S + row * RS;
+                            return Array.from({ length: COLS }).map((_, col) => {
+                              const idx = row * COLS + col;
+                              const on = w.grid[idx];
+                              const cx = 1 + HW / 2 + off + col * HW;
+                              return (
+                                <path
+                                  key={idx}
+                                  d={hp(cx, cy)}
+                                  fill={on ? w.color : "rgba(255,255,255,0.08)"}
+                                />
+                              );
+                            });
+                          })}
+                        </svg>
+                      );
+                    })()}
                     <div className="mt-2 text-center text-white/60 text-[8px] font-semibold">
                       HabitComb
                     </div>
