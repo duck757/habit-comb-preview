@@ -515,8 +515,8 @@ function Index() {
 
 function HabitCombPhoneScreen() {
   const habits = [
-    { name: "WORKOUTS", icon: "🏋️", color: "#a78bfa" },
-    { name: "CODING", icon: "💻", color: "#f87171" },
+    { name: "WORKOUTS", icon: "🏋️", color: "#a78bfa", ticked: new Set([0,1,2,4,5,6,7,10,11,13,14,15,17,20,21,22]) },
+    { name: "CODING", icon: "💻", color: "#f87171", ticked: new Set([0,1,3,4,5,7,8,10,11,12,14,15,16,17,20,22,23]) },
   ];
   const SIZE = 6;
   const HEX_W = Math.sqrt(3) * SIZE;
@@ -579,7 +579,7 @@ function HabitCombPhoneScreen() {
                   {h.name}
                 </div>
                 <div className="text-white/50 text-[7px] font-semibold tracking-wider">
-                  0/30 DAYS COMPLETED
+                  {h.ticked.size}/30 DAYS COMPLETED
                 </div>
               </div>
               <div
@@ -594,13 +594,15 @@ function HabitCombPhoneScreen() {
                 const rowOffset = rowIdx % 2 === 1 ? HEX_W / 2 : 0;
                 const cy = 1 + SIZE + rowIdx * ROW_STEP;
                 return Array.from({ length: COLS }).map((_, i) => {
+                  const idx = rowIdx * COLS + i;
+                  const isTicked = h.ticked.has(idx);
                   const cx = 1 + HEX_W / 2 + rowOffset + i * HEX_W;
                   return (
                     <path
                       key={`${rowIdx}-${i}`}
                       d={hexPath(cx, cy, SIZE - 0.5)}
                       fill={h.color}
-                      opacity={0.18}
+                      opacity={isTicked ? 1 : 0.18}
                     />
                   );
                 });
