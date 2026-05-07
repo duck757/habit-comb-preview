@@ -212,7 +212,7 @@ function Index() {
                 {"custom" in w && w.custom === "habitcomb" ? (
                   <HabitCombPhoneScreen />
                 ) : (
-                  <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 bg-black/70 backdrop-blur rounded-2xl p-3">
+                  <div className="absolute inset-x-4 top-[30%] -translate-y-1/2 bg-black/70 backdrop-blur rounded-2xl p-3">
                     <div className="flex items-center gap-2 mb-2">
                       <div
                         className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-bold"
@@ -258,6 +258,25 @@ function Index() {
                     })()}
                     <div className="mt-2 text-center text-white/60 text-[8px] font-semibold">
                       HabitComb
+                    </div>
+                  </div>
+                )}
+
+                {/* Homescreen dock */}
+                {"custom" in w && w.custom === "habitcomb" ? null : (
+                  <div className="absolute inset-x-0 bottom-0 px-3 pb-3 flex flex-col gap-1.5">
+                    {/* Search bar */}
+                    <div className="flex items-center gap-1.5 bg-white/20 backdrop-blur rounded-full px-3 py-1">
+                      <span className="text-white/60 text-[8px]">⌕</span>
+                      <span className="text-white/50 text-[8px] font-medium">Search</span>
+                    </div>
+                    {/* Dock */}
+                    <div className="flex items-center justify-center gap-3 bg-white/20 backdrop-blur rounded-2xl px-4 py-2">
+                      {["🧭","💬","📷","🎵"].map((icon) => (
+                        <div key={icon} className="w-7 h-7 rounded-xl flex items-center justify-center text-[14px] shadow-sm" style={{ background: "rgba(255,255,255,0.15)" }}>
+                          {icon}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
