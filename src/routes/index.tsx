@@ -30,7 +30,7 @@ function seededGrid(seed: number, count: number, density: number): boolean[] {
 
 const phoneWidgets = [
   { icon: "</>", label: "Side Hustle", color: "#fbbf24", density: 0.6, grid: seededGrid(42, 60, 0.6) },
-  { icon: "🏃", label: "Running", color: "#34d399", density: 0.7, grid: seededGrid(77, 60, 0.7) },
+  { icon: "🏃", label: "Running", color: "#60a5fa", density: 0.7, grid: seededGrid(77, 60, 0.7) },
 ];
 
 function Index() {
