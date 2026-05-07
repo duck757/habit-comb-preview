@@ -272,10 +272,13 @@ function Index() {
                     </div>
                     {/* Dock */}
                     <div className="flex items-center justify-center gap-3 bg-white/20 backdrop-blur rounded-2xl px-4 py-2">
-                      {["🧭","💬","📷","🎵"].map((icon) => (
-                        <div key={icon} className="w-7 h-7 rounded-xl flex items-center justify-center text-[14px] shadow-sm" style={{ background: "rgba(255,255,255,0.15)" }}>
-                          {icon}
-                        </div>
+                      {[
+                        "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/23/4c/cb/234ccbb4-e65a-bb94-f877-3d230743e9e3/safari-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.jpg",
+                        "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/0e/08/07/0e080793-1b66-d9b3-0bbe-8222669abf79/messages-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.jpg",
+                        "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/31/6c/c3/316cc33a-5e7d-8902-58eb-f4e16c5d9440/music-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.jpg",
+                        "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/67/05/f8/6705f876-0db2-711d-0d42-524ef6432165/maps-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.jpg",
+                      ].map((src) => (
+                        <img key={src} src={src} alt="" className="w-8 h-8 rounded-xl shadow-sm" />
                       ))}
                     </div>
                   </div>
