@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Star, Camera, Flame, BarChart3 } from "lucide-react";
 import { HabitComb } from "@/components/HabitComb";
+import { HabitAppScreen } from "@/components/HabitAppScreen";
 import { StoreButtons } from "@/components/StoreButtons";
 import logo from "@/assets/habitcomb-logo.png";
 
@@ -190,7 +191,8 @@ function Index() {
         <div className="max-w-6xl mx-auto px-6 py-20 grid grid-cols-1 sm:grid-cols-3 gap-8">
           {[
             { icon: "🧘", label: "Meditation", color: "#e879f9", custom: "habitcomb" as const, grid: [] as boolean[] },
-            ...phoneWidgets,
+            { icon: "", label: "", color: "", custom: "appscreen" as const, grid: [] as boolean[] },
+            ...phoneWidgets.slice(1),
           ].map((w, idx) => (
             <div
               key={idx}
@@ -199,7 +201,7 @@ function Index() {
               <div className="absolute top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-20" />
               <div
                 className={`relative w-full h-full rounded-[2.05rem] overflow-hidden ${
-                  "custom" in w && w.custom === "habitcomb"
+                  "custom" in w && (w.custom === "habitcomb" || w.custom === "appscreen")
                     ? "bg-black"
                     : "bg-gradient-to-br from-rose-700 via-fuchsia-700 to-indigo-800"
                 }`}
@@ -211,6 +213,8 @@ function Index() {
 
                 {"custom" in w && w.custom === "habitcomb" ? (
                   <HabitCombPhoneScreen />
+                ) : "custom" in w && w.custom === "appscreen" ? (
+                  <HabitAppScreen />
                 ) : (
                   <div className="absolute inset-x-4 top-[30%] -translate-y-1/2 bg-black/70 backdrop-blur rounded-2xl p-3">
                     <div className="flex items-center gap-2 mb-2">
@@ -247,12 +251,12 @@ function Index() {
                             const off = row % 2 === 1 ? HW / 2 : 0;
                             const cy = 1 + S + row * RS;
                             return Array.from({ length: COLS }).map((_, col) => {
-                              const idx = row * COLS + col;
-                              const on = w.grid[idx];
+                              const idx2 = row * COLS + col;
+                              const on = w.grid[idx2];
                               const cx = 1 + HW / 2 + off + col * HW;
                               return (
                                 <path
-                                  key={idx}
+                                  key={idx2}
                                   d={hp(cx, cy)}
                                   fill={on ? w.color : "rgba(255,255,255,0.08)"}
                                 />
@@ -269,14 +273,12 @@ function Index() {
                 )}
 
                 {/* Homescreen dock */}
-                {"custom" in w && w.custom === "habitcomb" ? null : (
+                {"custom" in w && (w.custom === "habitcomb" || w.custom === "appscreen") ? null : (
                   <div className="absolute inset-x-0 bottom-0 px-3 pb-3 flex flex-col gap-1.5">
-                    {/* Search bar */}
                     <div className="flex items-center gap-1.5 bg-white/20 backdrop-blur rounded-full px-3 py-1">
                       <span className="text-white/60 text-[8px]">⌕</span>
                       <span className="text-white/50 text-[8px] font-medium">Search</span>
                     </div>
-                    {/* Dock */}
                     <div className="flex items-center justify-center gap-3 bg-white/20 backdrop-blur rounded-2xl px-4 py-2">
                       {[
                         "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/23/4c/cb/234ccbb4-e65a-bb94-f877-3d230743e9e3/safari-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.jpg",
