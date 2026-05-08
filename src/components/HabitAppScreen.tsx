@@ -49,18 +49,6 @@ export function HabitAppScreen() {
       }}
     >
       <div className="px-3 pt-2 pb-4">
-        {/* Streak */}
-        <div className="text-[7px] font-bold tracking-widest mb-0.5" style={{ color: "#555" }}>
-          CURRENT STREAK
-        </div>
-        <div className="flex items-baseline gap-1 mb-1">
-          <span className="text-white font-extrabold" style={{ fontSize: "22px", lineHeight: 1 }}>14</span>
-          <span className="text-white font-bold text-[9px] tracking-widest">DAYS</span>
-        </div>
-        <p className="text-[7px] leading-relaxed mb-3" style={{ color: "#888" }}>
-          Your hive is flourishing. 4 habits completed<br />today. Keep the kinetic energy moving.
-        </p>
-
         {/* Hex grid */}
         <div className="mb-4">
           {Array.from({ length: ROWS }).map((_, row) => (
